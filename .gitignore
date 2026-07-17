@@ -1,0 +1,11 @@
+# Tailwind CSS
+/node_modules/
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

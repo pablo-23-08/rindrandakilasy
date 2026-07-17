@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>enseignant_mes_reservations</title>
+  <link href="./assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+<!-- SIDEBAR -->
+<nav class="w-64 bg-white border-r flex flex-col">
+  <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
+    <img src="assets/img/google-icons/chess_rook.svg" alt="RindranDakilasy" width="48" height="48">
+    RindranDakilasy
+  </div>
+
+  <div class="flex-1 p-4 space-y-2">
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+      Accueil
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="assets/img/google-icons/event_available.svg" alt="Mes réservations" width="24" height="24">
+      Mes réservations
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/edit_calendar.svg" alt="Faire une réservation" width="24" height="24">
+      Faire une réservation
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+      Mon profil
+    </a>
+
+  </div>
+
+  <div class="p-4 border-t">
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+      Déconnexion
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-1 flex flex-col">
+
+  <header class="h-16 bg-white border-b flex justify-end items-center px-6">
+    Nom enseignant
+  </header>
+
+  <main class="flex-1 p-8">
+
+    <!-- Filtre -->
+    <div class="mb-6">
+      <select class="border rounded px-4 py-2 bg-white">
+        <option value="">Filtrer par statut</option>
+        <option value="valide">Validé</option>
+        <option value="annule">Annulé</option>
+        <option value="attente">Attente</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="border px-4 py-2 text-center">SALLE</th>
+            <th class="border px-4 py-2 text-center">DATE</th>
+            <th class="border px-4 py-2 text-center">HORAIRE</th>
+            <th class="border px-4 py-2 text-center">STATUT</th>
+            <th class="border px-4 py-2 text-center">ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Amphi MIT</td>
+            <td class="border px-4 py-2 text-center">20/10/2026</td>
+            <td class="border px-4 py-2 text-center">08:00 - 10:00</td>
+            <td class="border px-4 py-2 text-center">Validé</td>
+            <td class="border px-4 py-2 text-center">
+              <button class="bg-red-600 text-white px-4 py-1 rounded">Annuler</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Grande salle MIT</td>
+            <td class="border px-4 py-2 text-center">21/10/2026</td>
+            <td class="border px-4 py-2 text-center">14:00 - 16:00</td>
+            <td class="border px-4 py-2 text-center">Annulé</td>
+            <td class="border px-4 py-2 text-center">-</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Grande salle MIT</td>
+            <td class="border px-4 py-2 text-center">22/10/2026</td>
+            <td class="border px-4 py-2 text-center">14:00 - 16:00</td>
+            <td class="border px-4 py-2 text-center">Attente</td>
+            <td class="border px-4 py-2 text-center">
+              <button class="bg-red-600 text-white px-4 py-1 rounded">Annuler</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Sous sol MIT</td>
+            <td class="border px-4 py-2 text-center">25/10/2026</td>
+            <td class="border px-4 py-2 text-center">10:00 - 12:00</td>
+            <td class="border px-4 py-2 text-center">Attente</td>
+            <td class="border px-4 py-2 text-center">
+              <button class="bg-red-600 text-white px-4 py-1 rounded">Annuler</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>admin_mon_profil</title>
+  <link href="./assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+<!-- SIDEBAR -->
+<nav class="w-64 bg-white border-r flex flex-col">
+  <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
+    <img src="assets/img/google-icons/chess_rook.svg" alt="RindranDakilasy" width="48" height="48">
+    RindranDakilasy
+  </div>
+
+  <div class="flex-1 p-4 space-y-2">
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+      Accueil
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/group.svg" alt="Utilisateurs" width="24" height="24">
+      Utilisateurs
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/meeting_room.svg" alt="Salles" width="24" height="24">
+      Salles
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
+      Calendrier des salles
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/description.svg" alt="Rapports" width="24" height="24">
+      Rapports
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
+      Historique
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+      Mon profil
+    </a>
+
+  </div>
+
+  <div class="p-4 border-t">
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+      Déconnexion
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-1 flex flex-col">
+
+  <main class="flex-1 p-8">
+
+    <form action="#" method="POST" class="max-w-2xl space-y-8">
+
+      <!-- Photo de profil -->
+      <div>
+        <img
+          src="assets/img/profile-placeholder.png"
+          alt="Photo de profil"
+          width="150"
+          height="150"
+          class="border rounded"
+        >
+      </div>
+
+      <!-- Informations personnelles -->
+      <section class="space-y-4">
+
+        <div>
+          <label for="nom" class="block text-sm font-medium mb-2">Nom complet :</label>
+          <input
+            type="text"
+            id="nom"
+            name="nom"
+            class="w-full max-w-sm border rounded px-4 py-2"
+          >
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium mb-2">Adresse Email :</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="w-full max-w-sm border rounded px-4 py-2"
+          >
+        </div>
+
+      </section>
+
+      <!-- Modification du mot de passe -->
+      <section>
+        <h2 class="text-sm font-semibold mb-4">MODIFICATION DU MOT DE PASSE</h2>
+
+        <div class="space-y-4">
+
+          <div>
+            <label for="new_password" class="block text-sm font-medium mb-2">Nouveau mot de passe :</label>
+            <input
+              type="password"
+              id="new_password"
+              name="new_password"
+              class="w-full max-w-sm border rounded px-4 py-2"
+            >
+          </div>
+
+          <div>
+            <label for="confirm_password" class="block text-sm font-medium mb-2">Confirmer le mot de passe :</label>
+            <input
+              type="password"
+              id="confirm_password"
+              name="confirm_password"
+              class="w-full max-w-sm border rounded px-4 py-2"
+            >
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Bouton Enregistrer -->
+      <div class="flex justify-end max-w-2xl">
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-6 py-2 rounded"
+        >
+          ENREGISTRER
+        </button>
+      </div>
+
+    </form>
+
+  </main>
+
+</div>
+
+</body>
+</html>

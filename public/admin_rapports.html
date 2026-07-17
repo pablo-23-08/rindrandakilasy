@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>admin_rapports</title>
+  <link href="./assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+<!-- SIDEBAR -->
+<nav class="w-64 bg-white border-r flex flex-col">
+  <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
+    <img src="assets/img/google-icons/chess_rook.svg" alt="RindranDakilasy" width="48" height="48">
+    RindranDakilasy
+  </div>
+
+  <div class="flex-1 p-4 space-y-2">
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+      Accueil
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/group.svg" alt="Utilisateurs" width="24" height="24">
+      Utilisateurs
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/meeting_room.svg" alt="Salles" width="24" height="24">
+      Salles
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
+      Calendrier des salles
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="assets/img/google-icons/description.svg" alt="Rapports" width="24" height="24">
+      Rapports
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
+      Historique
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+      Mon profil
+    </a>
+
+  </div>
+
+  <div class="p-4 border-t">
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+      Déconnexion
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-1 flex flex-col">
+
+  <header class="h-16 bg-white border-b flex justify-end items-center px-6">
+    Admin
+  </header>
+
+  <main class="flex-1 p-8">
+
+    <form action="#" method="POST" class="max-w-md space-y-8">
+
+      <!-- Type de rapport -->
+      <section>
+        <label for="type_rapport" class="block text-sm font-medium mb-2">Type de rapport :</label>
+        <select
+          id="type_rapport"
+          name="type_rapport"
+          class="w-full border rounded px-4 py-2 bg-white"
+        >
+          <option value="taux_occupation" selected>Taux d'occupation des salles</option>
+          <option value="nb_reservations">Nombre de réservations par salle</option>
+          <option value="stats_utilisateurs">Statistiques par utilisateur</option>
+        </select>
+      </section>
+
+      <!-- Période -->
+      <section>
+        <span class="block text-sm font-medium mb-2">Période :</span>
+
+        <div class="flex items-center gap-2">
+          <label for="date_debut" class="text-sm">Du</label>
+          <input
+            type="date"
+            id="date_debut"
+            name="date_debut"
+            class="border rounded px-4 py-2"
+          >
+          <label for="date_fin" class="text-sm">au</label>
+          <input
+            type="date"
+            id="date_fin"
+            name="date_fin"
+            class="border rounded px-4 py-2"
+          >
+        </div>
+      </section>
+
+      <!-- Format d'export -->
+      <section>
+        <span class="block text-sm font-medium mb-2">Format d'export :</span>
+
+        <div class="flex items-center gap-8">
+          <label class="flex items-center gap-2">
+            <input type="radio" name="format" value="pdf" checked>
+            <span>pdf</span>
+          </label>
+
+          <label class="flex items-center gap-2">
+            <input type="radio" name="format" value="csv">
+            <span>csv</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Bouton Exporter -->
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-6 py-2 rounded"
+        >
+          Exporter
+        </button>
+      </div>
+
+    </form>
+
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>admin_historique</title>
+  <link href="./assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+<!-- SIDEBAR -->
+<nav class="w-64 bg-white border-r flex flex-col">
+  <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
+    <img src="assets/img/google-icons/chess_rook.svg" alt="RindranDakilasy" width="48" height="48">
+    RindranDakilasy
+  </div>
+
+  <div class="flex-1 p-4 space-y-2">
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+      Accueil
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/group.svg" alt="Utilisateurs" width="24" height="24">
+      Utilisateurs
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/meeting_room.svg" alt="Salles" width="24" height="24">
+      Salles
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
+      Calendrier des salles
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/description.svg" alt="Rapports" width="24" height="24">
+      Rapports
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
+      Historique
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+      Mon profil
+    </a>
+
+  </div>
+
+  <div class="p-4 border-t">
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+      Déconnexion
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-1 flex flex-col">
+
+  <header class="h-16 bg-white border-b flex justify-end items-center px-6">
+    Admin
+  </header>
+
+  <main class="flex-1 p-8 overflow-auto">
+
+    <!-- Filtres -->
+    <div class="flex items-center gap-4 mb-6 flex-wrap">
+
+      <div class="flex items-center gap-2">
+        <label for="semaine" class="text-sm font-medium">Semaine du :</label>
+        <input
+          type="date"
+          id="semaine"
+          name="semaine"
+          class="border rounded px-4 py-2"
+        >
+      </div>
+
+      <div>
+        <select class="border rounded px-4 py-2 bg-white">
+          <option value="">Toutes les salles</option>
+          <option value="amphi_mit">Amphi MIT</option>
+          <option value="grande_salle_mit">Grande salle MIT</option>
+        </select>
+      </div>
+
+      <div>
+        <select class="border rounded px-4 py-2 bg-white">
+          <option value="">Tous les utilisateurs</option>
+          <option value="etudiant">Etudiant</option>
+          <option value="enseignant">Enseignant</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-2 ml-auto">
+        <input
+          type="text"
+          placeholder=""
+          class="border rounded px-4 py-2"
+        >
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">
+          Rechercher
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="border px-4 py-2 text-center">DEMANDEUR</th>
+            <th class="border px-4 py-2 text-center">SALLE</th>
+            <th class="border px-4 py-2 text-center">DATE</th>
+            <th class="border px-4 py-2 text-center">HORAIRE</th>
+            <th class="border px-4 py-2 text-center">MOTIF</th>
+            <th class="border px-4 py-2 text-center">ROLE</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">AEIT</td>
+            <td class="border px-4 py-2 text-center">Grande salle MIT</td>
+            <td class="border px-4 py-2 text-center">20/10/2026</td>
+            <td class="border px-4 py-2 text-center">14:00 - 16:00</td>
+            <td class="border px-4 py-2 text-center">Réunion mensuel</td>
+            <td class="border px-4 py-2 text-center">Etudiant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Pablo</td>
+            <td class="border px-4 py-2 text-center">Amphi MIT</td>
+            <td class="border px-4 py-2 text-center">22/10/2026</td>
+            <td class="border px-4 py-2 text-center">09:00 - 12:00</td>
+            <td class="border px-4 py-2 text-center">Partage d'information</td>
+            <td class="border px-4 py-2 text-center">Etudiant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Mr Robert Oppenheimer</td>
+            <td class="border px-4 py-2 text-center">Grande salle MIT</td>
+            <td class="border px-4 py-2 text-center">25/10/2026</td>
+            <td class="border px-4 py-2 text-center">14:00 - 16:00</td>
+            <td class="border px-4 py-2 text-center">Cours</td>
+            <td class="border px-4 py-2 text-center">Enseignant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Escobar</td>
+            <td class="border px-4 py-2 text-center">Amphi MIT</td>
+            <td class="border px-4 py-2 text-center">26/10/2026</td>
+            <td class="border px-4 py-2 text-center">09:00 - 12:00</td>
+            <td class="border px-4 py-2 text-center">Partage d'information</td>
+            <td class="border px-4 py-2 text-center">Etudiant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Mr Albert Einstein</td>
+            <td class="border px-4 py-2 text-center">Grande salle MIT</td>
+            <td class="border px-4 py-2 text-center">27/10/2026</td>
+            <td class="border px-4 py-2 text-center">14:00 - 16:00</td>
+            <td class="border px-4 py-2 text-center">Examen</td>
+            <td class="border px-4 py-2 text-center">Enseignant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Mr Haaland</td>
+            <td class="border px-4 py-2 text-center">Amphi MIT</td>
+            <td class="border px-4 py-2 text-center">29/10/2026</td>
+            <td class="border px-4 py-2 text-center">09:00 - 12:00</td>
+            <td class="border px-4 py-2 text-center">Travaux dirigés</td>
+            <td class="border px-4 py-2 text-center">Enseignant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">AEIT</td>
+            <td class="border px-4 py-2 text-center">Grande salle MIT</td>
+            <td class="border px-4 py-2 text-center">30/10/2026</td>
+            <td class="border px-4 py-2 text-center">14:00 - 16:00</td>
+            <td class="border px-4 py-2 text-center">Réunion urgente</td>
+            <td class="border px-4 py-2 text-center">Etudiant</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2 text-center">Mr Messi</td>
+            <td class="border px-4 py-2 text-center">Amphi MIT</td>
+            <td class="border px-4 py-2 text-center">31/10/2026</td>
+            <td class="border px-4 py-2 text-center">09:00 - 12:00</td>
+            <td class="border px-4 py-2 text-center">Cours</td>
+            <td class="border px-4 py-2 text-center">Enseignant</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

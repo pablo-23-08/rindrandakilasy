@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>faire_une_reservation</title>
+  <link href="./assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+<!-- SIDEBAR -->
+<nav class="w-64 bg-white border-r flex flex-col">
+  <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
+    <img src="assets/img/google-icons/chess_rook.svg" alt="RindranDakilasy" width="48" height="48">
+    RindranDakilasy
+  </div>
+
+  <div class="flex-1 p-4 space-y-2">
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+      Accueil
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/event_available.svg" alt="Mes réservations" width="24" height="24">
+      Mes réservations
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="assets/img/google-icons/edit_calendar.svg" alt="Faire une réservation" width="24" height="24">
+      Faire une réservation
+    </a>
+
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+      Mon profil
+    </a>
+
+  </div>
+
+  <div class="p-4 border-t">
+    <a href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+      Déconnexion
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-1 flex flex-col">
+
+  <header class="h-16 bg-white border-b flex justify-end items-center px-6">
+    Nom etudiant
+  </header>
+
+  <main class="flex-1 p-8">
+
+    <form action="#" method="POST" class="max-w-3xl space-y-8">
+
+      <!-- Quand souhaitez-vous réserver ? -->
+      <section>
+        <h2 class="text-lg font-semibold mb-4">Quand souhaitez-vous réserver ?</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <div>
+            <label for="date" class="block text-sm font-medium mb-2">Date :</label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              class="w-full border rounded px-4 py-2"
+            >
+          </div>
+
+          <div>
+            <label for="de" class="block text-sm font-medium mb-2">De :</label>
+            <input
+              type="time"
+              id="de"
+              name="de"
+              class="w-full border rounded px-4 py-2"
+            >
+          </div>
+
+          <div>
+            <label for="a" class="block text-sm font-medium mb-2">À :</label>
+            <input
+              type="time"
+              id="a"
+              name="a"
+              class="w-full border rounded px-4 py-2"
+            >
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Choix de la salle -->
+      <section>
+        <h2 class="text-lg font-semibold mb-2">Choix de la salle</h2>
+        <p class="text-sm mb-4">Sélectionnez une salle disponible pour ce créneau :</p>
+
+        <div class="space-y-3">
+
+          <label class="flex items-center gap-3">
+            <input type="radio" name="salle" value="amphi_mit">
+            <span>Amphi MIT | Capacité: 100 | Équipements: Projecteur, Micro, Wifi</span>
+          </label>
+
+          <label class="flex items-center gap-3">
+            <input type="radio" name="salle" value="grande_salle_mit">
+            <span>Grande salle MIT | Capacité: 50 | Équipements: Tableau blanc, Tableau électronique, PC, Wifi</span>
+          </label>
+
+          <label class="flex items-center gap-3">
+            <input type="radio" name="salle" value="sous_sol_mit">
+            <span>Sous sol MIT | Capacité: 60 | Équipements: Tableau électronique, Wifi</span>
+          </label>
+
+        </div>
+      </section>
+
+      <!-- Détails de la réservation -->
+      <section>
+        <h2 class="text-lg font-semibold mb-4">Détails de la réservation</h2>
+
+        <label for="motif" class="block text-sm font-medium mb-2">Motif / Activité prévue :</label>
+        <input
+          type="text"
+          id="motif"
+          name="motif"
+          class="w-full border rounded px-4 py-2"
+        >
+      </section>
+
+      <!-- Soumettre -->
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-6 py-2 rounded"
+        >
+          SOUMETTRE
+        </button>
+      </div>
+
+    </form>
+
+  </main>
+
+</div>
+
+</body>
+</html>
