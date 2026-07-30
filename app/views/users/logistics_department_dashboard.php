@@ -1,0 +1,111 @@
+<?php
+if (empty($_SESSION['user'])) {
+    header('Location: /rindrandakilasy/public/');
+    exit;
+}
+
+$userName = htmlspecialchars($_SESSION['user']['name']);
+$basePath = '/rindrandakilasy/public';
+$pageTitle = 'Service logistique tableau de bord';
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title><?= $pageTitle ?></title>
+  <link href="<?= $basePath ?>/assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="<?= $basePath ?>/assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+<!-- SIDEBAR -->
+<nav class="w-64 bg-white border-r flex flex-col">
+  <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
+    <img src="<?= $basePath ?>/assets/img/google-icons/chess_rook.svg" alt="Logo" width="48" height="48">
+    RindranDakilasy
+  </div>
+
+  <div class="flex-1 p-4 space-y-2">
+
+    <a href="<?= $basePath ?>/logistics/dashboard" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="<?= $basePath ?>/assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+      Accueil
+    </a>
+
+    <a href="<?= $basePath ?>/logistics/requests" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="<?= $basePath ?>/assets/img/google-icons/inbox.svg" alt="Demandes de réservation" width="24" height="24">
+      Demandes de réservation
+    </a>
+
+    <a href="<?= $basePath ?>/logistics/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="<?= $basePath ?>/assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
+      Calendrier des salles
+    </a>
+
+    <a href="<?= $basePath ?>/logistics/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="<?= $basePath ?>/assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
+      Historique
+    </a>
+
+    <a href="<?= $basePath ?>/logistics/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="<?= $basePath ?>/assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+      Mon profil
+    </a>
+
+  </div>
+
+  <div class="p-4 border-t">
+    <a href="<?= $basePath ?>/logout" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="<?= $basePath ?>/assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+      Déconnexion
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-1 flex flex-col">
+
+  <header class="h-16 bg-white border-b flex justify-end items-center px-6">
+    <?= $userName ?>
+  </header>
+
+  <main class="flex-1 p-8">
+
+    <h1 class="text-3xl font-bold mb-6">Tableau de bord</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="bg-white border rounded p-6 flex flex-col justify-between">
+        <h3 class="font-semibold text-lg">Traiter les demandes</h3>
+        <h4 class="text-sm">Consulter toutes les demandes existantes</h4>
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='<?= $basePath ?>/logistics/requests'">
+          Aller
+        </button>
+      </div>
+
+      <div class="bg-white border rounded p-6 flex flex-col justify-between">
+        <h3 class="font-semibold text-lg">Calendrier des salles</h3>
+        <h4 class="text-sm">Voir la disponibilité des salles</h4>
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='<?= $basePath ?>/logistics/calendar'">
+          Aller
+        </button>
+      </div>
+
+      <div class="bg-white border rounded p-6 flex flex-col justify-between">
+        <h3 class="font-semibold text-lg">Historique</h3>
+        <h4 class="text-sm">Consulter l'historique des demandes validées et refusées</h4>
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='<?= $basePath ?>/logistics/history'">
+          Aller
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

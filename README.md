@@ -49,7 +49,7 @@ L'application distingue plusieurs types d'utilisateurs.
 3. gérer les salles ;  
 4. suivre l'occupation des salles.
 
-   ### **Administrateur**
+   ###  
 
 1. gérer les utilisateurs ;  
 2. gérer les salles ;  
@@ -100,45 +100,53 @@ Le projet suit une architecture **MVC (Modèle  Vue  Contrôleur)**.
 
 Cette organisation permet de séparer la logique métier, l'interface utilisateur et l'accès aux données afin de rendre le code plus lisible, plus facile à maintenir et plus simple à faire évoluer.
 
-rindrandakilasy/  
-**`├──`** app/  
-**`│   ├──`** models/  
-**`│   │   ├──`** User.php  
-**`│   │   ├──`** Teacher.php  
-**`│   │   ├──`** StudentAssociation.php  
-**`│   │   ├──`** LogisticsDepartment.php  
-**`│   │   ├──`** Admin.php  
-**`│   │   ├──`** Room.php  
-**`│   │   ├──`** Reservation.php  
-**`│   │   └──`** Statistical.php  
-**`│   ├──`** views/  
-**`│   │   ├──`** auth/  
-**`│   │   ├──`** users/  
-**`│   │   ├──`** rooms/  
-**`│   │   ├──`** reservations/  
-**`│   │   ├──`** statistics/  
-**`│   │   ├──`** reports/  
-**`│   │   ├──`** layouts/  
-**`│   │   └──`** errors/  
-**`│   ├──`** controllers/  
-**`│   │   ├──`** AuthController.php  
-**`│   │   ├──`** UserController.php  
-**`│   │   ├──`** RoomController.php  
-**`│   │   ├──`** ReservationController.php  
-**`│   │   ├──`** StatisticalController.php  
-**`│   │   └──`** ReportController.php  
-**`│   ├──`** core/  
-**`│   │   ├──`** Database.php  
-**`│   │   └──`** Router.php  
-**`│   ├──`** config/  
-**`│   │   └──`** database.php  
-**`│   └──`** routes.php  
-**`└──`** public/  
-    **`├──`** assets/  
-    **`│   ├──`** css/  
-    **`│   ├──`** img/  
-    **`│   └──`** js/  
-    **`└──`** index.php 
+**`rindrandakilasy/`**  
+**`├── app/`**  
+**`│   ├── models/`**  
+**`│   │   ├── User.php`**  
+**`│   │   ├── Teacher.php`**  
+**`│   │   ├── StudentAssociation.php`**  
+**`│   │   ├── LogisticsDepartment.php`**  
+**`│   │   ├── Admin.php`**  
+**`│   │   ├── Room.php`**  
+**`│   │   ├── Reservation.php`**  
+**`│   │   └── Statistical.php`**  
+**`│   ├── views/`**  
+**`│   │   ├── auth/`**  
+**`│   │   │   └── login.php`**  
+**`│   │   ├── users/`**  
+**`│   │   │   ├── student_dashboard.php`**  
+**`│   │   │   ├── teacher_dashboard.php`**  
+**`│   │   │   ├── logistics_department_dashboard.php`**  
+**`│   │   │   └── administrator_dashboard.php`**  
+**`│   │   ├── rooms/`**  
+**`│   │   ├── reservations/`**  
+**`│   │   ├── statistics/`**  
+**`│   │   ├── reports/`**  
+**`│   │   ├── layouts/`**  
+**`│   │   └── errors/`**  
+**`│   ├── controllers/`**  
+**`│   │   ├── AuthController.php`**  
+**`│   │   ├── UserController.php`**  
+**`│   │   ├── RoomController.php`**  
+**`│   │   ├── ReservationController.php`**  
+**`│   │   ├── StatisticalController.php`**  
+**`│   │   └── ReportController.php`**  
+**`│   └── core/`**  
+**`│       ├── Database.php`**  
+**`│       └── Router.php`**  
+**`├── config/`**  
+**`│   ├── database.php`**  
+**`│   └── routes.php`**  
+**`└── public/`**  
+    **`├── assets/`**  
+    **`│   ├── css/`**  
+    **`│   ├── img/`**  
+    **`│   │   └── google-icons/`**  
+    **`│   └── js/`**  
+    **`└── index.php`** 
+
+## 
 
 ## **Objectifs du projet**
 
