@@ -1,21 +1,10 @@
-<?php
-if (empty($_SESSION['user'])) {
-    header('Location: /rindrandakilasy/public/');
-    exit;
-}
-
-$userName = htmlspecialchars($_SESSION['user']['name']);
-$basePath = '/rindrandakilasy/public';
-$pageTitle = 'Enseignant tableau de bord';
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title><?= $pageTitle ?></title>
-  <link href="<?= $basePath ?>/assets/css/output.css" rel="stylesheet">
-  <link rel="icon" href="<?= $basePath ?>/assets/img/google-icons/chess_rook.svg" type="image/x-icon">
+  <link href="assets/css/output.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/google-icons/chess_rook.svg" type="image/x-icon">
 </head>
 
 <body class="bg-gray-50 h-screen flex">
@@ -23,37 +12,37 @@ $pageTitle = 'Enseignant tableau de bord';
 <!-- SIDEBAR -->
 <nav class="w-64 bg-white border-r flex flex-col">
   <div class="h-16 flex items-center px-6 border-b font-bold text-xl">
-    <img src="<?= $basePath ?>/assets/img/google-icons/chess_rook.svg" alt="Logo" width="48" height="48">
+    <img src="assets/img/google-icons/chess_rook.svg" alt="Logo" width="48" height="48">
     RindranDakilasy
   </div>
 
   <div class="flex-1 p-4 space-y-2">
 
-    <a href="<?= $basePath ?>/teacher/dashboard" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
-      <img src="<?= $basePath ?>/assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
+    <a href="index.php?route=teacher/dashboard" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+      <img src="assets/img/google-icons/dashboard.svg" alt="Accueil" width="24" height="24">
       Accueil
     </a>
 
-    <a href="<?= $basePath ?>/teacher/reservations" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
-      <img src="<?= $basePath ?>/assets/img/google-icons/event_available.svg" alt="Mes réservations" width="24" height="24">
+    <a href="index.php?route=teacher/reservations" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/event_available.svg" alt="Mes réservations" width="24" height="24">
       Mes réservations
     </a>
 
-    <a href="<?= $basePath ?>/teacher/new-reservation" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
-      <img src="<?= $basePath ?>/assets/img/google-icons/edit_calendar.svg" alt="Faire une réservation" width="24" height="24">
+    <a href="index.php?route=teacher/new-reservation" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/edit_calendar.svg" alt="Faire une réservation" width="24" height="24">
       Faire une réservation
     </a>
 
-    <a href="<?= $basePath ?>/teacher/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
-      <img src="<?= $basePath ?>/assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
+    <a href="index.php?route=teacher/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
       Mon profil
     </a>
 
   </div>
 
   <div class="p-4 border-t">
-    <a href="<?= $basePath ?>/logout" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
-      <img src="<?= $basePath ?>/assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
+    <a href="index.php?route=logout" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+      <img src="assets/img/google-icons/logout.svg" alt="Déconnexion" width="24" height="24">
       Déconnexion
     </a>
   </div>
@@ -75,7 +64,7 @@ $pageTitle = 'Enseignant tableau de bord';
       <div class="bg-white border rounded p-6 flex flex-col justify-between">
         <h3 class="font-semibold text-lg">Voir mes réservations</h3>
         <h4 class="text-sm">Consulter toutes les réservations existantes</h4>
-        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='<?= $basePath ?>/teacher/reservations'">
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='index.php?route=teacher/reservations'">
           Aller
         </button>
       </div>
@@ -83,7 +72,7 @@ $pageTitle = 'Enseignant tableau de bord';
       <div class="bg-white border rounded p-6 flex flex-col justify-between">
         <h3 class="font-semibold text-lg">Faire une réservation</h3>
         <h4 class="text-sm">Créer une nouvelle réservation de salle</h4>
-        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='<?= $basePath ?>/teacher/new-reservation'">
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='index.php?route=teacher/new-reservation'">
           Aller
         </button>
       </div>
@@ -91,7 +80,7 @@ $pageTitle = 'Enseignant tableau de bord';
       <div class="bg-white border rounded p-6 flex flex-col justify-between">
         <h3 class="font-semibold text-lg">Voir mon profil</h3>
         <h4 class="text-sm">Consulter et modifier vos informations personnelles</h4>
-        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='<?= $basePath ?>/teacher/profile'">
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick="window.location.href='index.php?route=teacher/profile'">
           Aller
         </button>
       </div>

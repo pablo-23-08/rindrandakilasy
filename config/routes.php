@@ -1,19 +1,19 @@
 <?php
 
+// Table de routage : chaque route pointe vers un Controller + une action.
+// Même principe que dans mpandova : ['controller' => ..., 'action' => ...]
+
 return [
-    // Quand l'utilisateur va sur la racine "/" -> on affiche la vue
-    '/'       => ['view' => 'auth/login.php'],
-    
-    // Quand le formulaire est soumis (POST) -> on appelle le contrôleur
-    'login'   => ['controller' => 'AuthController', 'action' => 'login'],
-    
-    // Déconnexion
-    'logout'  => ['controller' => 'AuthController', 'action' => 'logout'],
 
-    // Dashboards par rôle
-    'student/dashboard'   => ['view' => 'users/student_dashboard.php'],
-    'teacher/dashboard'   => ['view' => 'users/teacher_dashboard.php'],
-    'logistics/dashboard' => ['view' => 'users/logistics_department_dashboard.php'],
-    'administrator/dashboard'     => ['view' => 'users/administrator_dashboard.php'],
+    // ── Authentification ──
+    'home'   => ['controller' => 'AuthController', 'action' => 'home'],
+    'login'  => ['controller' => 'AuthController', 'action' => 'login'],
+    'logout' => ['controller' => 'AuthController', 'action' => 'logout'],
+
+    // ── Tableaux de bord (un par rôle) ──
+    'student/dashboard'       => ['controller' => 'UserController', 'action' => 'studentDashboard'],
+    'teacher/dashboard'       => ['controller' => 'UserController', 'action' => 'teacherDashboard'],
+    'logistics/dashboard'     => ['controller' => 'UserController', 'action' => 'logisticsDashboard'],
+    'administrator/dashboard' => ['controller' => 'UserController', 'action' => 'administratorDashboard'],
+
 ];
-

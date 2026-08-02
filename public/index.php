@@ -1,34 +1,17 @@
 <?php
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+// ═══════════════════════════════════════════════
+// FRONT CONTROLLER — Point d'entrée unique du site
+// ═══════════════════════════════════════════════
+//
+// Toutes les URLs passent par ce fichier.
+// Exemple : index.php?route=student/dashboard
+//
+// Grâce au routage par paramètre GET (au lieu d'une réécriture d'URL),
+// l'application fonctionne à l'identique quel que soit le dossier
+// dans lequel "public/" est hébergé (local, sous-dossier, racine AlwaysData...).
 
-    require_once '../app/core/Database.php';
-    require_once '../app/core/Router.php';
+require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../app/core/Router.php';
 
-    /*
-    |--------------------------------------------------------------------------
-    | Test de connexion PDO
-    |--------------------------------------------------------------------------
-    */
-
-    // try {
-
-    //     Database::connect();
-
-    //     // echo "Connexion réussie";
-
-    // } catch (Exception $e) {
-
-    //     die($e->getMessage());
-
-    // }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Lancement du routeur
-    |--------------------------------------------------------------------------
-    */
-
-    $router = new Router();
-    $router->dispatch();
+$router = new Router();
+$router->dispatch();

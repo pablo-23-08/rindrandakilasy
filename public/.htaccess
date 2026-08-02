@@ -1,11 +1,7 @@
-RewriteEngine On
+# public/ est le dossier racine du site (local ou hébergement type AlwaysData).
+# Comme le routage se fait via index.php?route=..., aucune réécriture d'URL n'est nécessaire.
 
-RewriteBase /rindrandakilasy/public/
+DirectoryIndex index.php
 
-# Si le fichier demandé n'existe pas physiquement
-RewriteCond %{REQUEST_FILENAME} !-f
-# Et si le dossier n'existe pas non plus
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Rediriger toutes les requêtes vers index.php
-RewriteRule ^ index.php [QSA,L]
+# Empêche l'affichage du contenu des dossiers
+Options -Indexes

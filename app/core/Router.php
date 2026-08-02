@@ -1,46 +1,38 @@
 <?php
 
-class Router
-{
-    private $routes;
-
-    public function __construct()
+    /**
+     * Routeur de l'application.
+     * Lit la route demandée via ?route=... et déclenche le bon Controller/action.
+     * Exemple : index.php?route=student/dashboard
+     */
+    class Router
     {
-        $this->routes = require __DIR__ . '/../../config/routes.php';
-    }
+        private array $routes;
 
-    public function dispatch()
-    {
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-        $projectFolder = '/rindrandakilasy/public/';
-
-        if (strpos($uri, $projectFolder) === 0) {
-            $uri = substr($uri, strlen($projectFolder));
-        } 
-
-        if ($uri == '') {
-            $uri = '/';
+        public function __construct()
+        {
+            $this->routes = require __DIR__ . '/../../config/routes.php';
         }
 
-        if (isset($this->routes[$uri])) {
-            
-            $route = $this->routes[$uri];
+        public function dispatch(): void
+        {
+            // Route demandée dans l'URL, "home" par défaut (page de connexion)
+            $route = $_GET['route'] ?? 'home';
 
-            // 1. Si c'est un contrôleur (ex: POST login)
-            if (isset($route['controller'])) {
-                require_once __DIR__ . '/../controllers/' . $route['controller'] . '.php';
-                $controller = new $route['controller']();
-                $action = $route['action'];
-                $controller->$action();
-            } 
-            // 2. Sinon, c'est une vue (ex: GET / pour afficher le formulaire)
-            else if (isset($route['view'])) {
-                require __DIR__ . '/../views/' . $route['view'];
+            if (!isset($this->routes[$route])) {
+                http_response_code(404);
+                echo "<h1>404 - Page introuvable</h1>";
+                echo "<a href='index.php'>Retour à l'accueil</a>";
+                return;
             }
 
-        } else {
-            echo "<h1>404 - Page introuvable</h1>";
+            $definition     = $this->routes[$route];
+            $controllerName = $definition['controller'];
+            $action         = $definition['action'];
+
+            require_once __DIR__ . '/../controllers/' . $controllerName . '.php';
+
+            $controller = new $controllerName();
+            $controller->$action();
         }
     }
-}
