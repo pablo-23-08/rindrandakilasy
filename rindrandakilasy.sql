@@ -14,6 +14,13 @@ CREATE TABLE users (
     role ENUM('admin', 'teacher', 'student', 'logistics_department') NOT NULL
 );
 
+CREATE TABLE session ( 
+    id_session VARCHAR(128) PRIMARY KEY,
+    id_user INT UNSIGNED NOT NULL, 
+    role ENUM('admin', 'teacher', 'student', 'logistics_department') NOT NULL, 
+    initial INT UNSIGNED NOT NULL );
+
+
 INSERT INTO users (name, email, password, role)
 VALUES (
     'Administrateur',
