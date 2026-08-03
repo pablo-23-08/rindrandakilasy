@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════
 
 require_once __DIR__ . '/../app/models/User.php';
+require_once __DIR__ . '/../app/models/Session.php';
 
 // Démarrage de session sécurisé (une seule fois même si le fichier est inclus plusieurs fois)
 if (session_status() === PHP_SESSION_NONE) {
@@ -68,7 +69,7 @@ function checkAuth(): void
         exit();
     }
 
-    $session = User::findSession(session_id());
+    $session = Session::find(session_id());
 
     // Session absente ou ne correspondant pas à l'utilisateur en session PHP → invalide
     if (!$session || (int) $session['id_user'] !== (int) $_SESSION['user']['id']) {
@@ -78,7 +79,7 @@ function checkAuth(): void
     }
 
     // Met à jour l'horodatage d'activité
-    User::touchSession(session_id());
+    Session::touch(session_id());
 }
 
 /**
@@ -110,7 +111,7 @@ function redirectIfLogged(): void
         return; // Pas connecté → on laisse afficher la page de connexion
     }
 
-    $session = User::findSession(session_id());
+    $session = Session::find(session_id());
 
     if (!$session || (int) $session['id_user'] !== (int) $_SESSION['user']['id']) {
         // Session invalide côté serveur : on nettoie proprement et on laisse passer
@@ -118,7 +119,7 @@ function redirectIfLogged(): void
         return;
     }
 
-    User::touchSession(session_id());
+    Session::touch(session_id());
 
     header('Location: index.php?route=' . dashboardRoute($_SESSION['user']['role']));
     exit();

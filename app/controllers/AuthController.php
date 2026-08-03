@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════
 
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Session.php';
 
 class AuthController
 {
@@ -52,8 +53,8 @@ class AuthController
             'role' => $user['role']
         ];
 
-        // Enregistre également la session en base de données (table `session`)
-        User::createSession(session_id(), $user['id'], $user['role']);
+        // Enregistre également la session en base de données (table `sessions`)
+        Session::create(session_id(), $user['id']);
 
         // Redirection selon le rôle de l'utilisateur
         header("Location: index.php?route=" . dashboardRoute($user['role']));
@@ -68,7 +69,7 @@ class AuthController
     {
         if (isset($_SESSION['user'])) {
             // Supprime la session de la base de données
-            User::deleteSession(session_id());
+            Session::delete(session_id());
         }
 
         // Vide et détruit la session PHP (variables + cookie)
