@@ -145,6 +145,72 @@ class Reservation
     }
 
     /**
+     * Récupère toutes les réservations en attente ("pending"), avec le nom
+     * du demandeur et le nom de la salle, triées par créneau le plus proche.
+     * Utilisé par le service logistique pour traiter les demandes.
+     */
+    public static function findPending(): array
+    {
+        $db = Database::connect();
+
+        $sql = "SELECT
+                    r.id,
+                    r.purpose,
+                    r.start_datetime,
+                    r.end_datetime,
+                    r.status,
+                    u.name AS requester_name,
+                    rm.name AS room_name
+                FROM reservations r
+                INNER JOIN users u ON u.id = r.id_user
+                INNER JOIN rooms rm ON rm.id = r.id_room
+                WHERE r.status = 'pending'
+                ORDER BY r.start_datetime ASC";
+
+        $stmt = $db->query($sql);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Valide une demande de réservation encore "en attente".
+     * Enregistre qui l'a validée et à quel moment.
+     * Retourne true si une ligne a bien été mise à jour.
+     */
+    public static function approve(int $id, int $validatorId): bool
+    {
+        $db = Database::connect();
+
+        $stmt = $db->prepare(
+            "UPDATE reservations
+             SET status = 'approved', validated_at = NOW(), validated_by = ?
+             WHERE id = ? AND status = 'pending'"
+        );
+        $stmt->execute([$validatorId, $id]);
+
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Refuse une demande de réservation encore "en attente".
+     * Enregistre qui l'a refusée, à quel moment, et le motif du refus (facultatif).
+     * Retourne true si une ligne a bien été mise à jour.
+     */
+    public static function refuse(int $id, int $validatorId, ?string $reason = null): bool
+    {
+        $db = Database::connect();
+
+        $stmt = $db->prepare(
+            "UPDATE reservations
+             SET status = 'refused', validated_at = NOW(), validated_by = ?, refusal_reason = ?
+             WHERE id = ? AND status = 'pending'"
+        );
+        $stmt->execute([$validatorId, $reason, $id]);
+
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
      * Crée une nouvelle réservation et retourne son id.
      * Les réservations créées par un étudiant sont, par défaut, mises en
      * statut "pending" : elles doivent être validées par le service logistique.

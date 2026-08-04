@@ -1,7 +1,7 @@
 <?php
 // ═══════════════════════════════════════════════
 // CONTROLLER ReservationController
-// Gère les réservations de salles (consultation, annulation...) selon le rôle.
+// Gère les réservations de salles (consultation, annulation, création, validation) selon le rôle.
 // ═══════════════════════════════════════════════
 
 require_once __DIR__ . '/../models/Reservation.php';
@@ -194,12 +194,12 @@ class ReservationController
             $redirect .= '&status=' . urlencode($status);
         }
 
-    header('Location: ' . $redirect);
-    exit;
-}
+        header('Location: ' . $redirect);
+        exit;
+    }
 
     /**
-     * Affiche le formulaire permettant à l'étudiant connecté de faire
+     * Affiche le formulaire permettant à l'enseignant connecté de faire
      * une nouvelle demande de réservation de salle.
      * (GET index.php?route=teacher/new-reservation)
      */
@@ -218,7 +218,7 @@ class ReservationController
     }
 
     /**
-     * Traite la demande de réservation soumise par l'étudiant connecté.
+     * Traite la demande de réservation soumise par l'enseignant connecté.
      * La réservation est créée avec le statut "pending" : elle doit être
      * validée par le service logistique avant de devenir effective.
      * (POST index.php?route=teacher/new-reservation/store)
@@ -283,12 +283,70 @@ class ReservationController
             exit;
         }
 
-        // Règle de gestion : une réservation d'étudiant attend toujours la validation du service logistique
         Reservation::create($roomId, $userId, $purpose, $start, $end, 'pending');
 
         $_SESSION['success'] = "Votre demande de réservation a bien été envoyée. Elle est en attente de validation.";
 
-            header('Location: index.php?route=teacher/reservations');
-            exit;
-        }
+        header('Location: index.php?route=teacher/reservations');
+        exit;
     }
+
+    /**
+     * Affiche la liste des demandes de réservation en attente de validation.
+     * Réservé au service logistique.
+     * (GET index.php?route=logistics/requests)
+     */
+    public function logisticsRequests()
+    {
+        checkRole('logistics_department');
+
+        $userName     = htmlspecialchars($_SESSION['user']['name']);
+        $reservations = Reservation::findPending();
+
+        require __DIR__ . '/../views/reservations/logistics_department_booking_requests.php';
+    }
+
+    /**
+     * Valide une demande de réservation en attente.
+     * (POST index.php?route=logistics/requests/approve)
+     */
+    public function approveReservation()
+    {
+        checkRole('logistics_department');
+
+        $reservationId = (int) ($_POST['id'] ?? 0);
+        $validatorId   = (int) $_SESSION['user']['id'];
+
+        if ($reservationId > 0 && Reservation::approve($reservationId, $validatorId)) {
+            $_SESSION['success'] = "La demande de réservation a bien été validée.";
+        } else {
+            $_SESSION['error'] = "Impossible de valider cette demande de réservation.";
+        }
+
+        header('Location: index.php?route=logistics/requests');
+        exit;
+    }
+
+    /**
+     * Refuse une demande de réservation en attente.
+     * (POST index.php?route=logistics/requests/refuse)
+     */
+    public function refuseReservation()
+    {
+        checkRole('logistics_department');
+
+        $reservationId = (int) ($_POST['id'] ?? 0);
+        $validatorId   = (int) $_SESSION['user']['id'];
+        $reason        = trim($_POST['motif_refus'] ?? '');
+        $reason        = $reason !== '' ? $reason : null;
+
+        if ($reservationId > 0 && Reservation::refuse($reservationId, $validatorId, $reason)) {
+            $_SESSION['success'] = "La demande de réservation a bien été refusée.";
+        } else {
+            $_SESSION['error'] = "Impossible de refuser cette demande de réservation.";
+        }
+
+        header('Location: index.php?route=logistics/requests');
+        exit;
+    }
+}

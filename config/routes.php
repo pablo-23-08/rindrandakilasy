@@ -44,4 +44,12 @@ return [
     'admin/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
     'admin/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
 
+
+    // ── Réservations (service logistique) ──
+    'logistics/requests'         => ['controller' => 'ReservationController', 'action' => 'logisticsRequests'],
+    'logistics/requests/approve' => ['controller' => 'ReservationController', 'action' => 'approveReservation'],
+    'logistics/requests/refuse'  => ['controller' => 'ReservationController', 'action' => 'refuseReservation'],
+
+
+
 ];
