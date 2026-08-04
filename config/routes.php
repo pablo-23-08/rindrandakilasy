@@ -32,4 +32,8 @@ return [
     'student/profile'        => ['controller' => 'UserController', 'action' => 'studentProfile'],
     'student/profile/update' => ['controller' => 'UserController', 'action' => 'updateStudentProfile'],
 
+     // ── Profil (enseignant) ──
+    'teacher/profile'        => ['controller' => 'UserController', 'action' => 'teacherProfile'],
+    'teacher/profile/update' => ['controller' => 'UserController', 'action' => 'updateTeacherProfile'],
+
 ];

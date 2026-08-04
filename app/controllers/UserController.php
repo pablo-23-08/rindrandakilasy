@@ -145,7 +145,95 @@ class UserController
 
         $_SESSION['success'] = "Votre profil a bien été mis à jour.";
 
-        header('Location: index.php?route=student/profile');
+    header('Location: index.php?route=student/profile');
+    exit;
+}
+
+
+/**
+ * Affiche la page "Mon profil" de l'étudiant connecté.
+ * (GET index.php?route=teacher/profile)
+ */
+public function teacherProfile()
+    {
+        checkRole('teacher');
+
+        $userId = (int) $_SESSION['user']['id'];
+        $user   = User::findById($userId);
+
+        if (!$user) {
+            // Sécurité : l'utilisateur en session n'existe plus en base
+            header('Location: index.php?route=logout');
+            exit;
+        }
+
+        $userName = htmlspecialchars($_SESSION['user']['name']);
+
+        require __DIR__ . '/../views/users/teacher_profile.php';
+    }
+
+    /**
+     * Traite la modification du profil (nom, email, mot de passe) de
+     * le professeur connecté.
+     * (POST index.php?route=teacher/profile/update)
+     */
+    public function updateTeacherProfile()
+    {
+        checkRole('teacher');
+
+        $userId = (int) $_SESSION['user']['id'];
+
+        $name            = trim($_POST['nom'] ?? '');
+        $email           = trim($_POST['email'] ?? '');
+        $newPassword     = trim($_POST['new_password'] ?? '');
+        $confirmPassword = trim($_POST['confirm_password'] ?? '');
+
+        if ($name === '' || $email === '') {
+            $_SESSION['error'] = "Veuillez remplir le nom complet et l'adresse email.";
+            header('Location: index.php?route=teacher/profile');
+            exit;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error'] = "L'adresse email saisie n'est pas valide.";
+            header('Location: index.php?route=teacher/profile');
+            exit;
+        }
+
+        if (User::findByEmailExcludingId($email, $userId)) {
+            $_SESSION['error'] = "Cette adresse email est déjà utilisée par un autre compte.";
+            header('Location: index.php?route=teacher/profile');
+            exit;
+        }
+
+        // La modification du mot de passe est facultative : on ne la traite
+        // que si l'un des deux champs a été rempli.
+        if ($newPassword !== '' || $confirmPassword !== '') {
+            if (strlen($newPassword) < 8) {
+                $_SESSION['error'] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
+                header('Location: index.php?route=teacher/profile');
+                exit;
+            }
+
+            if ($newPassword !== $confirmPassword) {
+                $_SESSION['error'] = "Les deux mots de passe ne correspondent pas.";
+                header('Location: index.php?route=teacher/profile');
+                exit;
+            }
+        }
+
+        User::updateProfile($userId, $name, $email);
+
+        if ($newPassword !== '') {
+            User::updatePassword($userId, password_hash($newPassword, PASSWORD_DEFAULT));
+        }
+
+        // Met à jour le nom affiché dans la session PHP courante
+        $_SESSION['user']['name'] = $name;
+
+        $_SESSION['success'] = "Votre profil a bien été mis à jour.";
+
+        header('Location: index.php?route=teacher/profile');
         exit;
     }
 }
