@@ -28,12 +28,20 @@ return [
     'teacher/new-reservation'       => ['controller' => 'ReservationController', 'action' => 'newTeacherReservationForm'],
     'teacher/new-reservation/store' => ['controller' => 'ReservationController', 'action' => 'storeTeacherReservation'],
 
-     // ── Profil (étudiant) ──
-    'student/profile'        => ['controller' => 'UserController', 'action' => 'studentProfile'],
-    'student/profile/update' => ['controller' => 'UserController', 'action' => 'updateStudentProfile'],
+    // ── Profil (commun à TOUS les rôles) ──
+    // Une seule vue (app/views/users/profile.php) et une seule paire d'actions
+    // (UserController::profile / updateProfile) gèrent la page "Mon profil"
+    // pour les 4 rôles : student, teacher, logistics_department, admin.
+    'student/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
+    'student/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
 
-     // ── Profil (enseignant) ──
-    'teacher/profile'        => ['controller' => 'UserController', 'action' => 'teacherProfile'],
-    'teacher/profile/update' => ['controller' => 'UserController', 'action' => 'updateTeacherProfile'],
+    'teacher/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
+    'teacher/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
+
+    'logistics/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
+    'logistics/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
+
+    'admin/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
+    'admin/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
 
 ];

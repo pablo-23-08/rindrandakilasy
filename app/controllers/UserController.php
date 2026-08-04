@@ -2,15 +2,28 @@
 // ═══════════════════════════════════════════════
 // CONTROLLER UserController
 // Gère l'affichage des tableaux de bord (un par rôle) ainsi que la page
-// "Mon profil" (consultation + modification des informations personnelles
-// et du mot de passe). La gestion de session reste dans Session.php,
-// jamais dans ce contrôleur ni dans le model User.
+// "Mon profil", commune à TOUS les rôles (student, teacher,
+// logistics_department, admin) : une seule action profile()/updateProfile()
+// et une seule vue (users/profile.php) au lieu d'une paire par rôle.
+// La gestion de session reste dans Session.php, jamais dans ce contrôleur
+// ni dans le model User (principe de responsabilité unique).
 // ═══════════════════════════════════════════════
 
 require_once __DIR__ . '/../models/User.php';
 
 class UserController
 {
+    /**
+     * Associe chaque rôle à la route de sa page "Mon profil".
+     * Utilisé pour rediriger vers la bonne page après une mise à jour.
+     */
+    private const PROFILE_ROUTES = [
+        'student'               => 'student/profile',
+        'teacher'                => 'teacher/profile',
+        'logistics_department'   => 'logistics/profile',
+        'admin'                  => 'admin/profile',
+    ];
+
     /**
      * Tableau de bord étudiant.
      * Seuls les utilisateurs ayant le rôle "student" peuvent y accéder.
@@ -63,12 +76,15 @@ class UserController
     }
 
     /**
-     * Affiche la page "Mon profil" de l'étudiant connecté.
-     * (GET index.php?route=student/profile)
+     * Affiche la page "Mon profil" de l'utilisateur connecté, quel que soit
+     * son rôle. Une seule vue (users/profile.php) est utilisée pour tous les
+     * rôles : elle adapte elle-même son menu latéral selon le rôle en session.
+     * (GET index.php?route=student/profile | teacher/profile
+     *                     | logistics/profile | admin/profile)
      */
-    public function studentProfile()
+    public function profile()
     {
-        checkRole('student');
+        checkAuth();
 
         $userId = (int) $_SESSION['user']['id'];
         $user   = User::findById($userId);
@@ -81,19 +97,22 @@ class UserController
 
         $userName = htmlspecialchars($_SESSION['user']['name']);
 
-        require __DIR__ . '/../views/users/student_profile.php';
+        require __DIR__ . '/../views/users/profile.php';
     }
 
     /**
      * Traite la modification du profil (nom, email, mot de passe) de
-     * l'étudiant connecté.
-     * (POST index.php?route=student/profile/update)
+     * l'utilisateur connecté, quel que soit son rôle.
+     * (POST index.php?route=student/profile/update | teacher/profile/update
+     *                      | logistics/profile/update | admin/profile/update)
      */
-    public function updateStudentProfile()
+    public function updateProfile()
     {
-        checkRole('student');
+        checkAuth();
 
-        $userId = (int) $_SESSION['user']['id'];
+        $userId       = (int) $_SESSION['user']['id'];
+        $role         = $_SESSION['user']['role'];
+        $profileRoute = self::PROFILE_ROUTES[$role] ?? 'home';
 
         $name            = trim($_POST['nom'] ?? '');
         $email           = trim($_POST['email'] ?? '');
@@ -102,19 +121,19 @@ class UserController
 
         if ($name === '' || $email === '') {
             $_SESSION['error'] = "Veuillez remplir le nom complet et l'adresse email.";
-            header('Location: index.php?route=student/profile');
+            header('Location: index.php?route=' . $profileRoute);
             exit;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error'] = "L'adresse email saisie n'est pas valide.";
-            header('Location: index.php?route=student/profile');
+            header('Location: index.php?route=' . $profileRoute);
             exit;
         }
 
         if (User::findByEmailExcludingId($email, $userId)) {
             $_SESSION['error'] = "Cette adresse email est déjà utilisée par un autre compte.";
-            header('Location: index.php?route=student/profile');
+            header('Location: index.php?route=' . $profileRoute);
             exit;
         }
 
@@ -123,13 +142,13 @@ class UserController
         if ($newPassword !== '' || $confirmPassword !== '') {
             if (strlen($newPassword) < 8) {
                 $_SESSION['error'] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
-                header('Location: index.php?route=student/profile');
+                header('Location: index.php?route=' . $profileRoute);
                 exit;
             }
 
             if ($newPassword !== $confirmPassword) {
                 $_SESSION['error'] = "Les deux mots de passe ne correspondent pas.";
-                header('Location: index.php?route=student/profile');
+                header('Location: index.php?route=' . $profileRoute);
                 exit;
             }
         }
@@ -145,95 +164,7 @@ class UserController
 
         $_SESSION['success'] = "Votre profil a bien été mis à jour.";
 
-    header('Location: index.php?route=student/profile');
-    exit;
-}
-
-
-/**
- * Affiche la page "Mon profil" de l'étudiant connecté.
- * (GET index.php?route=teacher/profile)
- */
-public function teacherProfile()
-    {
-        checkRole('teacher');
-
-        $userId = (int) $_SESSION['user']['id'];
-        $user   = User::findById($userId);
-
-        if (!$user) {
-            // Sécurité : l'utilisateur en session n'existe plus en base
-            header('Location: index.php?route=logout');
-            exit;
-        }
-
-        $userName = htmlspecialchars($_SESSION['user']['name']);
-
-        require __DIR__ . '/../views/users/teacher_profile.php';
-    }
-
-    /**
-     * Traite la modification du profil (nom, email, mot de passe) de
-     * le professeur connecté.
-     * (POST index.php?route=teacher/profile/update)
-     */
-    public function updateTeacherProfile()
-    {
-        checkRole('teacher');
-
-        $userId = (int) $_SESSION['user']['id'];
-
-        $name            = trim($_POST['nom'] ?? '');
-        $email           = trim($_POST['email'] ?? '');
-        $newPassword     = trim($_POST['new_password'] ?? '');
-        $confirmPassword = trim($_POST['confirm_password'] ?? '');
-
-        if ($name === '' || $email === '') {
-            $_SESSION['error'] = "Veuillez remplir le nom complet et l'adresse email.";
-            header('Location: index.php?route=teacher/profile');
-            exit;
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['error'] = "L'adresse email saisie n'est pas valide.";
-            header('Location: index.php?route=teacher/profile');
-            exit;
-        }
-
-        if (User::findByEmailExcludingId($email, $userId)) {
-            $_SESSION['error'] = "Cette adresse email est déjà utilisée par un autre compte.";
-            header('Location: index.php?route=teacher/profile');
-            exit;
-        }
-
-        // La modification du mot de passe est facultative : on ne la traite
-        // que si l'un des deux champs a été rempli.
-        if ($newPassword !== '' || $confirmPassword !== '') {
-            if (strlen($newPassword) < 8) {
-                $_SESSION['error'] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
-                header('Location: index.php?route=teacher/profile');
-                exit;
-            }
-
-            if ($newPassword !== $confirmPassword) {
-                $_SESSION['error'] = "Les deux mots de passe ne correspondent pas.";
-                header('Location: index.php?route=teacher/profile');
-                exit;
-            }
-        }
-
-        User::updateProfile($userId, $name, $email);
-
-        if ($newPassword !== '') {
-            User::updatePassword($userId, password_hash($newPassword, PASSWORD_DEFAULT));
-        }
-
-        // Met à jour le nom affiché dans la session PHP courante
-        $_SESSION['user']['name'] = $name;
-
-        $_SESSION['success'] = "Votre profil a bien été mis à jour.";
-
-        header('Location: index.php?route=teacher/profile');
+        header('Location: index.php?route=' . $profileRoute);
         exit;
     }
 }
