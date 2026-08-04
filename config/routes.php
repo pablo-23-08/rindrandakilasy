@@ -16,4 +16,8 @@ return [
     'logistics/dashboard'     => ['controller' => 'UserController', 'action' => 'logisticsDashboard'],
     'administrator/dashboard' => ['controller' => 'UserController', 'action' => 'administratorDashboard'],
 
+    // ── Réservations (étudiant) ──
+    'student/reservations'        => ['controller' => 'ReservationController', 'action' => 'studentReservations'],
+    'student/reservations/cancel' => ['controller' => 'ReservationController', 'action' => 'cancelStudentReservation'],
+
 ];
