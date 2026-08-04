@@ -20,4 +20,8 @@ return [
     'student/reservations'        => ['controller' => 'ReservationController', 'action' => 'studentReservations'],
     'student/reservations/cancel' => ['controller' => 'ReservationController', 'action' => 'cancelStudentReservation'],
 
+    // ── Réservations (enseignant) ──
+    'teacher/reservations'        => ['controller' => 'ReservationController', 'action' => 'teacherReservations'],
+    'teacher/reservations/cancel' => ['controller' => 'ReservationController', 'action' => 'cancelTeacherReservation'],
+
 ];

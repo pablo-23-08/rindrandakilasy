@@ -29,7 +29,7 @@ class ReservationController
 
         $reservations = Reservation::findByUser($userId, $status);
 
-        require __DIR__ . '/../views/reservations/student_reservations.php';
+        require __DIR__ . '/../views/reservations/student_reservation.php';
     }
 
     /**
@@ -49,6 +49,51 @@ class ReservationController
         }
 
         $redirect = 'index.php?route=student/reservations';
+
+        if (in_array($status, self::ALLOWED_STATUSES, true)) {
+            $redirect .= '&status=' . urlencode($status);
+        }
+
+        header('Location: ' . $redirect);
+        exit;
+    }
+
+    /**
+     * Affiche la liste des réservations de l'enseignant connecté.
+     * Un filtre optionnel par statut est accepté via ?status=...
+     */
+    public function teacherReservations()
+    {
+        checkRole('teacher');
+
+        $userId   = (int) $_SESSION['user']['id'];
+        $userName = htmlspecialchars($_SESSION['user']['name']);
+
+        $status = $_GET['status'] ?? '';
+        $status = in_array($status, self::ALLOWED_STATUSES, true) ? $status : '';
+
+        $reservations = Reservation::findByUser($userId, $status);
+
+        require __DIR__ . '/../views/reservations/teacher_reservation.php';
+    }
+
+    /**
+     * Traite l'annulation d'une réservation par l'enseignant connecté.
+     * (POST index.php?route=teacher/reservations/cancel)
+     */
+    public function cancelTeacherReservation()
+    {
+        checkRole('teacher');
+
+        $userId        = (int) $_SESSION['user']['id'];
+        $reservationId = (int) ($_POST['id'] ?? 0);
+        $status        = $_POST['status'] ?? '';
+
+        if ($reservationId > 0) {
+            Reservation::cancel($reservationId, $userId);
+        }
+
+        $redirect = 'index.php?route=teacher/reservations';
 
         if (in_array($status, self::ALLOWED_STATUSES, true)) {
             $redirect .= '&status=' . urlencode($status);
