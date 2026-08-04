@@ -16,6 +16,13 @@ class Reservation
     private const CANCELLABLE_STATUSES = ['pending', 'approved'];
 
     /**
+     * Statuts qui occupent réellement un créneau : une salle ayant déjà une
+     * réservation "pending" ou "approved" sur un créneau ne peut pas être
+     * re-réservée sur ce même créneau (règle de gestion n°1).
+     */
+    private const BLOCKING_STATUSES = ['pending', 'approved'];
+
+    /**
      * Libellés lisibles (français) des statuts stockés en base.
      */
     private const STATUS_LABELS = [
@@ -110,5 +117,54 @@ class Reservation
     public static function statusLabel(string $status): string
     {
         return self::STATUS_LABELS[$status] ?? $status;
+    }
+
+    /**
+     * Vérifie si une salle a déjà une réservation ("pending" ou "approved")
+     * qui chevauche le créneau donné.
+     * Deux créneaux se chevauchent si : début A < fin B ET fin A > début B.
+     */
+    public static function hasConflict(int $roomId, string $start, string $end): bool
+    {
+        $db = Database::connect();
+
+        $placeholders = implode(',', array_fill(0, count(self::BLOCKING_STATUSES), '?'));
+
+        $sql = "SELECT COUNT(*) FROM reservations
+                WHERE id_room = ?
+                  AND status IN ($placeholders)
+                  AND start_datetime < ?
+                  AND end_datetime > ?";
+
+        $params = array_merge([$roomId], self::BLOCKING_STATUSES, [$end, $start]);
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+
+        return (int) $stmt->fetchColumn() > 0;
+    }
+
+    /**
+     * Crée une nouvelle réservation et retourne son id.
+     * Les réservations créées par un étudiant sont, par défaut, mises en
+     * statut "pending" : elles doivent être validées par le service logistique.
+     */
+    public static function create(
+        int $roomId,
+        int $userId,
+        string $purpose,
+        string $start,
+        string $end,
+        string $status = 'pending'
+    ): int {
+        $db = Database::connect();
+
+        $stmt = $db->prepare(
+            "INSERT INTO reservations (id_room, id_user, purpose, start_datetime, end_datetime, status)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $stmt->execute([$roomId, $userId, $purpose, $start, $end, $status]);
+
+        return (int) $db->lastInsertId();
     }
 }

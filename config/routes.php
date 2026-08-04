@@ -19,6 +19,8 @@ return [
     // ── Réservations (étudiant) ──
     'student/reservations'        => ['controller' => 'ReservationController', 'action' => 'studentReservations'],
     'student/reservations/cancel' => ['controller' => 'ReservationController', 'action' => 'cancelStudentReservation'],
+    'student/new-reservation'       => ['controller' => 'ReservationController', 'action' => 'newStudentReservationForm'],
+    'student/new-reservation/store' => ['controller' => 'ReservationController', 'action' => 'storeStudentReservation'],
 
     // ── Réservations (enseignant) ──
     'teacher/reservations'        => ['controller' => 'ReservationController', 'action' => 'teacherReservations'],
