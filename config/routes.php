@@ -28,4 +28,8 @@ return [
     'teacher/new-reservation'       => ['controller' => 'ReservationController', 'action' => 'newTeacherReservationForm'],
     'teacher/new-reservation/store' => ['controller' => 'ReservationController', 'action' => 'storeTeacherReservation'],
 
+     // ── Profil (étudiant) ──
+    'student/profile'        => ['controller' => 'UserController', 'action' => 'studentProfile'],
+    'student/profile/update' => ['controller' => 'UserController', 'action' => 'updateStudentProfile'],
+
 ];
