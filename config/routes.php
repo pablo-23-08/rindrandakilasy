@@ -25,5 +25,7 @@ return [
     // ── Réservations (enseignant) ──
     'teacher/reservations'        => ['controller' => 'ReservationController', 'action' => 'teacherReservations'],
     'teacher/reservations/cancel' => ['controller' => 'ReservationController', 'action' => 'cancelTeacherReservation'],
+    'teacher/new-reservation'       => ['controller' => 'ReservationController', 'action' => 'newTeacherReservationForm'],
+    'teacher/new-reservation/store' => ['controller' => 'ReservationController', 'action' => 'storeTeacherReservation'],
 
 ];

@@ -194,7 +194,101 @@ class ReservationController
             $redirect .= '&status=' . urlencode($status);
         }
 
-        header('Location: ' . $redirect);
-        exit;
-    }
+    header('Location: ' . $redirect);
+    exit;
 }
+
+    /**
+     * Affiche le formulaire permettant à l'étudiant connecté de faire
+     * une nouvelle demande de réservation de salle.
+     * (GET index.php?route=teacher/new-reservation)
+     */
+    public function newTeacherReservationForm()
+    {
+        checkRole('teacher');
+
+        $userName = htmlspecialchars($_SESSION['user']['name']);
+        $rooms    = Room::findAllAvailable();
+
+        // Ré-affiche les valeurs saisies précédemment en cas d'erreur de validation
+        $old = $_SESSION['old'] ?? [];
+        unset($_SESSION['old']);
+
+        require __DIR__ . '/../views/reservations/teacher_make_reservation.php';
+    }
+
+    /**
+     * Traite la demande de réservation soumise par l'étudiant connecté.
+     * La réservation est créée avec le statut "pending" : elle doit être
+     * validée par le service logistique avant de devenir effective.
+     * (POST index.php?route=teacher/new-reservation/store)
+     */
+    public function storeTeacherReservation()
+    {
+        checkRole('teacher');
+
+        $userId  = (int) $_SESSION['user']['id'];
+        $date    = trim($_POST['date'] ?? '');
+        $from    = trim($_POST['de'] ?? '');
+        $to      = trim($_POST['a'] ?? '');
+        $roomId  = (int) ($_POST['salle'] ?? 0);
+        $purpose = trim($_POST['motif'] ?? '');
+
+        // Conserve la saisie pour pré-remplir le formulaire en cas d'erreur
+        $old = [
+            'date'  => $date,
+            'de'    => $from,
+            'a'     => $to,
+            'salle' => $roomId,
+            'motif' => $purpose,
+        ];
+
+        if ($date === '' || $from === '' || $to === '' || $roomId <= 0 || $purpose === '') {
+            $_SESSION['error'] = "Veuillez remplir tous les champs et choisir une salle.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=teacher/new-reservation');
+            exit;
+        }
+
+        $start = $date . ' ' . $from . ':00';
+        $end   = $date . ' ' . $to . ':00';
+
+        if (strtotime($start) === false || strtotime($end) === false || strtotime($end) <= strtotime($start)) {
+            $_SESSION['error'] = "L'heure de fin doit être postérieure à l'heure de début.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=teacher/new-reservation');
+            exit;
+        }
+
+        if (strtotime($start) < time()) {
+            $_SESSION['error'] = "Impossible de réserver un créneau déjà passé.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=teacher/new-reservation');
+            exit;
+        }
+
+        $room = Room::findAvailableById($roomId);
+
+        if (!$room) {
+            $_SESSION['error'] = "La salle sélectionnée n'est pas disponible.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=teacher/new-reservation');
+            exit;
+        }
+
+        if (Reservation::hasConflict($roomId, $start, $end)) {
+            $_SESSION['error'] = "Cette salle est déjà réservée sur ce créneau. Choisissez un autre créneau ou une autre salle.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=teacher/new-reservation');
+            exit;
+        }
+
+        // Règle de gestion : une réservation d'étudiant attend toujours la validation du service logistique
+        Reservation::create($roomId, $userId, $purpose, $start, $end, 'pending');
+
+        $_SESSION['success'] = "Votre demande de réservation a bien été envoyée. Elle est en attente de validation.";
+
+            header('Location: index.php?route=teacher/reservations');
+            exit;
+        }
+    }
