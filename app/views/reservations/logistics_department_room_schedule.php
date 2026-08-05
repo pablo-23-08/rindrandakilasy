@@ -2,17 +2,20 @@
 // ═══════════════════════════════════════════════
 // VUE logistics_department_room_schedule.php
 // Calendrier des salles pour le service logistique.
-// Affiche simplement le tableau $scheduleGrid préparé par le contrôleur.
+// Affiche uniquement les réservations VALIDÉES ("approved").
+// Le contrôleur ne transmet déjà que des réservations "approved"
+// (voir Reservation::findActiveByDate), mais on ajoute ici une
+// vérification explicite dans la vue : une réservation "pending"
+// (en attente) ne doit jamais être affichée dans ce calendrier.
 // ═══════════════════════════════════════════════
 
-// Libellés et styles pour les réservations (uniquement les statuts pertinents)
+// Seul le statut "approved" est pertinent dans ce calendrier :
+// les réservations en attente ne doivent pas y apparaître.
 $statusStyles = [
     'approved' => 'bg-green-100 text-green-800 border-green-300',
-    'pending'  => 'bg-yellow-100 text-yellow-800 border-yellow-300',
 ];
 $statusLabels = [
     'approved' => 'Validé',
-    'pending'  => 'Attente',
 ];
 ?>
 <!DOCTYPE html>
@@ -109,7 +112,7 @@ $statusLabels = [
             </noscript>
         </form>
 
-        <!-- Calendrier (Affichage direct de la grille) -->
+        <!-- Calendrier : uniquement les réservations validées ("approved") -->
         <div class="overflow-x-auto shadow-sm rounded-lg">
             <table class="w-full border-collapse bg-white text-sm">
                 <thead class="bg-gray-100">
@@ -139,12 +142,19 @@ $statusLabels = [
                                 </td>
 
                                 <?php foreach ($timeSlots as $slot): ?>
-                                    <!-- Récupération directe sans aucun filtrage logique -->
                                     <?php $reservation = $scheduleGrid[(int) $room['id']][$slot['start']] ?? null; ?>
 
+                                    <!--
+                                        Garde-fou explicite : même si le contrôleur ne transmet déjà
+                                        que des réservations "approved" (Reservation::findActiveByDate),
+                                        on vérifie ici le statut avant tout affichage. Une réservation
+                                        "pending" (en attente) ne doit jamais apparaître dans ce calendrier.
+                                    -->
+                                    <?php $isApproved = $reservation && $reservation['status'] === 'approved'; ?>
+
                                     <td class="border p-1 align-top text-center w-32 h-16">
-                                        <?php if ($reservation): ?>
-                                            <?php $style = $statusStyles[$reservation['status']] ?? 'bg-gray-100 text-gray-800 border-gray-300'; ?>
+                                        <?php if ($isApproved): ?>
+                                            <?php $style = $statusStyles['approved']; ?>
                                             <div class="border rounded p-1.5 h-full flex flex-col justify-center <?= $style ?>">
                                                 <span class="font-bold text-xs truncate" title="<?= htmlspecialchars($reservation['requester_name']) ?>">
                                                     <?= htmlspecialchars($reservation['requester_name']) ?>
