@@ -67,4 +67,9 @@ return [
     'admin/rooms/update'  => ['controller' => 'RoomController', 'action' => 'updateRoom'],
 
 
+    // ── Rapports (administrateur) ──
+    'admin/reports'          => ['controller' => 'ReportController', 'action' => 'index'],
+    'admin/reports/export'   => ['controller' => 'ReportController', 'action' => 'export'],
+    'admin/reports/download' => ['controller' => 'ReportController', 'action' => 'download'],
+
 ];
