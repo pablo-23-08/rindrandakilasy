@@ -59,6 +59,11 @@ return [
     'admin/users/edit'    => ['controller' => 'UserController', 'action' => 'editUserForm'],
     'admin/users/update'  => ['controller' => 'UserController', 'action' => 'updateUser'],
 
+    // ── Gestion des salles (administrateur) ──
+    'admin/rooms'        => ['controller' => 'RoomController', 'action' => 'manage'],
+    'admin/rooms/store'  => ['controller' => 'RoomController', 'action' => 'store'],
+    'admin/rooms/update' => ['controller' => 'RoomController', 'action' => 'update'],
+
 
 
 ];
