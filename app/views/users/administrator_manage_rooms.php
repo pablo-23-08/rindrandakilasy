@@ -1,11 +1,16 @@
 <?php
 // ═══════════════════════════════════════════════
 // VUE administrator_manage_rooms.php
-// Interface de l'administrateur pour consulter, filtrer, ajouter et
-// modifier les salles.
-// Variables attendues du contrôleur (RoomController::manage) :
-//   $userName, $rooms, $buildings, $status, $search
+// Interface de l'administrateur pour consulter et filtrer les salles.
+// L'ajout et la modification d'une salle se font désormais sur une page
+// dédiée (administrator_room_form.php), au même principe que pour les
+// utilisateurs (administrator_user_form.php).
+// Variables attendues du contrôleur (RoomController::manageRooms) :
+//   $userName, $rooms, $status, $search
 // ═══════════════════════════════════════════════
+
+$status = $status ?? '';
+$search = $search ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -101,8 +106,11 @@
     <!-- Actions & Filtres -->
     <div class="flex items-center gap-4 mb-6 flex-wrap">
 
-      <button type="button" onclick="document.getElementById('add-room-modal').showModal()"
-              class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
+      <button
+        type="button"
+        onclick="window.location.href='index.php?route=admin/rooms/new'"
+        class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700"
+      >
         Ajouter une nouvelle salle
       </button>
 
@@ -171,9 +179,11 @@
                 </td>
                 <td class="border px-4 py-2 text-center"><?= (int) $room['usage_count'] ?></td>
                 <td class="border px-4 py-2 text-center">
-                  <button type="button"
-                          onclick="document.getElementById('edit-room-modal-<?= (int) $room['id'] ?>').showModal()"
-                          class="bg-blue-600 text-white px-4 py-1 rounded cursor-pointer hover:bg-blue-700">
+                  <button
+                    type="button"
+                    onclick="window.location.href='index.php?route=admin/rooms/edit&id=<?= (int) $room['id'] ?>'"
+                    class="bg-blue-600 text-white px-4 py-1 rounded cursor-pointer hover:bg-blue-700"
+                  >
                     Modifier
                   </button>
                 </td>
@@ -189,140 +199,6 @@
   </main>
 
 </div>
-
-<!-- ═══════════════════════════════════════════════
-     MODALE : Ajouter une nouvelle salle
-     ═══════════════════════════════════════════════ -->
-<dialog id="add-room-modal" class="rounded-lg p-0 w-full max-w-lg backdrop:bg-black/40">
-  <form method="POST" action="index.php?route=admin/rooms/store" class="p-6 space-y-4">
-
-    <h2 class="text-xl font-bold mb-2">Ajouter une nouvelle salle</h2>
-
-    <div>
-      <label class="block text-sm font-medium mb-1" for="add-nom">Nom de la salle</label>
-      <input type="text" id="add-nom" name="nom" required class="w-full border rounded px-4 py-2">
-    </div>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-medium mb-1" for="add-batiment">Bâtiment</label>
-        <select id="add-batiment" name="batiment" required class="w-full border rounded px-4 py-2 bg-white">
-          <option value="">Sélectionner...</option>
-          <?php foreach ($buildings as $building): ?>
-            <option value="<?= (int) $building['id'] ?>"><?= htmlspecialchars($building['name']) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="add-capacite">Capacité</label>
-        <input type="number" id="add-capacite" name="capacite" min="1" required class="w-full border rounded px-4 py-2">
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium mb-1" for="add-equipements">Équipements (séparés par des virgules)</label>
-      <input type="text" id="add-equipements" name="equipements" placeholder="Tableau blanc, Projecteur, Wifi"
-             class="w-full border rounded px-4 py-2">
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium mb-1" for="add-statut">Statut</label>
-      <select id="add-statut" name="statut" required class="w-full border rounded px-4 py-2 bg-white">
-        <option value="available">Opérationnelle (disponible)</option>
-        <option value="maintenance">Inopérationnelle (en maintenance)</option>
-        <option value="disabled">Inopérationnelle (désactivée)</option>
-      </select>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium mb-1" for="add-description">Description (facultatif)</label>
-      <textarea id="add-description" name="description" rows="2" class="w-full border rounded px-4 py-2"></textarea>
-    </div>
-
-    <div class="flex justify-end gap-3 pt-2">
-      <button type="button" onclick="document.getElementById('add-room-modal').close()"
-              class="px-4 py-2 rounded border cursor-pointer hover:bg-gray-100">
-        Annuler
-      </button>
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
-        Ajouter
-      </button>
-    </div>
-
-  </form>
-</dialog>
-
-<!-- ═══════════════════════════════════════════════
-     MODALES : Modifier une salle (une par ligne)
-     ═══════════════════════════════════════════════ -->
-<?php foreach ($rooms as $room): ?>
-  <dialog id="edit-room-modal-<?= (int) $room['id'] ?>" class="rounded-lg p-0 w-full max-w-lg backdrop:bg-black/40">
-    <form method="POST" action="index.php?route=admin/rooms/update" class="p-6 space-y-4">
-
-      <h2 class="text-xl font-bold mb-2">Modifier « <?= htmlspecialchars($room['name']) ?> »</h2>
-
-      <input type="hidden" name="id" value="<?= (int) $room['id'] ?>">
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="edit-nom-<?= (int) $room['id'] ?>">Nom de la salle</label>
-        <input type="text" id="edit-nom-<?= (int) $room['id'] ?>" name="nom" required
-               value="<?= htmlspecialchars($room['name']) ?>" class="w-full border rounded px-4 py-2">
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1" for="edit-batiment-<?= (int) $room['id'] ?>">Bâtiment</label>
-          <select id="edit-batiment-<?= (int) $room['id'] ?>" name="batiment" required class="w-full border rounded px-4 py-2 bg-white">
-            <?php foreach ($buildings as $building): ?>
-              <option value="<?= (int) $building['id'] ?>" <?= (int) $building['id'] === (int) $room['building_id'] ? 'selected' : '' ?>>
-                <?= htmlspecialchars($building['name']) ?>
-              </option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1" for="edit-capacite-<?= (int) $room['id'] ?>">Capacité</label>
-          <input type="number" id="edit-capacite-<?= (int) $room['id'] ?>" name="capacite" min="1" required
-                 value="<?= (int) $room['capacity'] ?>" class="w-full border rounded px-4 py-2">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="edit-equipements-<?= (int) $room['id'] ?>">Équipements (séparés par des virgules)</label>
-        <input type="text" id="edit-equipements-<?= (int) $room['id'] ?>" name="equipements"
-               value="<?= htmlspecialchars($room['equipments'] ?? '') ?>" class="w-full border rounded px-4 py-2">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="edit-statut-<?= (int) $room['id'] ?>">Statut</label>
-        <select id="edit-statut-<?= (int) $room['id'] ?>" name="statut" required class="w-full border rounded px-4 py-2 bg-white">
-          <option value="available" <?= $room['status'] === 'available' ? 'selected' : '' ?>>Opérationnelle (disponible)</option>
-          <option value="maintenance" <?= $room['status'] === 'maintenance' ? 'selected' : '' ?>>Inopérationnelle (en maintenance)</option>
-          <option value="disabled" <?= $room['status'] === 'disabled' ? 'selected' : '' ?>>Inopérationnelle (désactivée)</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="edit-description-<?= (int) $room['id'] ?>">Description (facultatif)</label>
-        <textarea id="edit-description-<?= (int) $room['id'] ?>" name="description" rows="2"
-                  class="w-full border rounded px-4 py-2"><?= htmlspecialchars($room['description'] ?? '') ?></textarea>
-      </div>
-
-      <div class="flex justify-end gap-3 pt-2">
-        <button type="button" onclick="document.getElementById('edit-room-modal-<?= (int) $room['id'] ?>').close()"
-                class="px-4 py-2 rounded border cursor-pointer hover:bg-gray-100">
-          Annuler
-        </button>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
-          Enregistrer
-        </button>
-      </div>
-
-    </form>
-  </dialog>
-<?php endforeach; ?>
 
 </body>
 </html>

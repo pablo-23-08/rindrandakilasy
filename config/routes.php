@@ -60,10 +60,11 @@ return [
     'admin/users/update'  => ['controller' => 'UserController', 'action' => 'updateUser'],
 
     // ── Gestion des salles (administrateur) ──
-    'admin/rooms'        => ['controller' => 'RoomController', 'action' => 'manage'],
-    'admin/rooms/store'  => ['controller' => 'RoomController', 'action' => 'store'],
-    'admin/rooms/update' => ['controller' => 'RoomController', 'action' => 'update'],
-
+    'admin/rooms'         => ['controller' => 'RoomController', 'action' => 'manageRooms'],
+    'admin/rooms/new'     => ['controller' => 'RoomController', 'action' => 'newRoomForm'],
+    'admin/rooms/store'   => ['controller' => 'RoomController', 'action' => 'storeRoom'],
+    'admin/rooms/edit'    => ['controller' => 'RoomController', 'action' => 'editRoomForm'],
+    'admin/rooms/update'  => ['controller' => 'RoomController', 'action' => 'updateRoom'],
 
 
 ];
