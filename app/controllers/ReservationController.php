@@ -368,11 +368,12 @@ class ReservationController
         exit;
     }
 
+    // ... (les autres méthodes au-dessus)
+
     /**
      * Affiche le calendrier des salles pour une journée donnée (aujourd'hui par
      * défaut), avec un filtre optionnel par salle. Réservé au service logistique.
-     * Le calendrier est construit sur des créneaux fixes d'une heure
-     * (07:00 - 08:00, 08:00 - 09:00, ..., 16:00 - 17:00).
+     * Le calendrier affiche les réservations au format horizontal.
      * (GET index.php?route=logistics/calendar)
      */
     public function roomSchedule()
@@ -390,29 +391,30 @@ class ReservationController
         // Filtre optionnel par salle.
         $roomId = (int) ($_GET['salle'] ?? 0);
 
-        $rooms     = Room::findAllAvailable(); // liste complète, pour le <select> de filtre
+        // Récupère toutes les salles pour le <select> de filtre
+        $rooms = Room::findAllAvailable();
+        
+        // Récupère les créneaux horaires
         $timeSlots = Reservation::timeSlots();
 
-        $activeReservations = Reservation::findActiveByDate($date, $roomId > 0 ? $roomId : null);
+        // Récupère les réservations (le modèle s'occupe de ne ramener que ce qu'il faut)
+        $reservations = Reservation::findActiveByDate($date, $roomId > 0 ? $roomId : null);
 
-        // Construit une grille [id_room][heure_debut] = réservation, pour un
-        // affichage simple dans la vue (une cellule par salle et par créneau).
-        // Une réservation qui couvre plusieurs créneaux (ex: 07:00 - 09:00)
-        // occupe bien chacune des cellules concernées (07:00-08:00 et 08:00-09:00).
+        // Construit la grille $scheduleGrid avec les données reçues
         $scheduleGrid = [];
-
-        foreach ($activeReservations as $reservation) {
+        foreach ($reservations as $reservation) {
             $resStart = date('H:i', strtotime($reservation['start_datetime']));
             $resEnd   = date('H:i', strtotime($reservation['end_datetime']));
 
             foreach ($timeSlots as $slot) {
+                // Si le créneau horaire chevauche la réservation, on l'ajoute à la grille
                 if ($slot['start'] >= $resStart && $slot['end'] <= $resEnd) {
                     $scheduleGrid[(int) $reservation['id_room']][$slot['start']] = $reservation;
                 }
             }
         }
 
-        // Lignes du tableau : toutes les salles, ou uniquement celle filtrée.
+        // Salles à afficher dans le tableau (toutes ou celle filtrée)
         $displayRooms = $roomId > 0
             ? array_values(array_filter($rooms, fn ($room) => (int) $room['id'] === $roomId))
             : $rooms;
@@ -429,4 +431,4 @@ class ReservationController
 
         return $parsed !== false && $parsed->format('Y-m-d') === $date;
     }
-}
+} // <-- Fin de la classe ReservationController

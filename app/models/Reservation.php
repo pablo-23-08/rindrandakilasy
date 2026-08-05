@@ -76,7 +76,7 @@ class Reservation
     }
 
     /**
-     * Récupère toutes les réservations actives ("pending" ou "approved") d'une
+     * Récupère uniquement les réservations validées ("approved") d'une
      * journée donnée, avec le nom du demandeur, triées par créneau. Un filtre
      * optionnel sur la salle peut être appliqué.
      * Utilisé par le service logistique pour afficher le calendrier des salles.
@@ -85,6 +85,7 @@ class Reservation
     {
         $db = Database::connect();
 
+        // 🟢 MODIFICATION ICI : On ne récupère plus que r.status = 'approved'
         $sql = "SELECT
                     r.id,
                     r.id_room,
@@ -96,7 +97,7 @@ class Reservation
                 FROM reservations r
                 INNER JOIN users u ON u.id = r.id_user
                 WHERE DATE(r.start_datetime) = ?
-                  AND r.status IN ('pending', 'approved')";
+                  AND r.status = 'approved'";
 
         $params = [$date];
 
