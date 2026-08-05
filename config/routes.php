@@ -52,6 +52,13 @@ return [
     'logistics/calendar'         => ['controller' => 'ReservationController', 'action' => 'roomSchedule'],
     'logistics/history'          => ['controller' => 'ReservationController', 'action' => 'logisticsHistory'],
 
+        // ── Gestion des utilisateurs (administrateur) ──
+    'admin/users'         => ['controller' => 'UserController', 'action' => 'manageUsers'],
+    'admin/users/new'     => ['controller' => 'UserController', 'action' => 'newUserForm'],
+    'admin/users/store'   => ['controller' => 'UserController', 'action' => 'storeUser'],
+    'admin/users/edit'    => ['controller' => 'UserController', 'action' => 'editUserForm'],
+    'admin/users/update'  => ['controller' => 'UserController', 'action' => 'updateUser'],
+
 
 
 ];
