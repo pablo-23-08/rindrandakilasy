@@ -33,6 +33,87 @@ class Reservation
     ];
 
     /**
+     * Heures fixes (bornes) utilisées pour construire les créneaux d'une heure
+     * proposés au calendrier des salles ainsi qu'aux formulaires de réservation
+     * (étudiant / enseignant). Une réservation ne peut commencer ou finir que
+     * sur l'une de ces heures : impossible de réserver 07:40 - 08:12.
+     */
+    public const TIME_BOUNDARIES = [
+        '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
+        '13:00', '14:00', '15:00', '16:00', '17:00',
+    ];
+
+    /**
+     * Construit la liste des créneaux d'une heure à partir des bornes fixes
+     * ci-dessus : 07:00 - 08:00, 08:00 - 09:00, ..., 16:00 - 17:00.
+     * Utilisé pour l'en-tête du calendrier des salles et pour les listes
+     * déroulantes "De" / "À" des formulaires de réservation.
+     */
+    public static function timeSlots(): array
+    {
+        $slots = [];
+
+        for ($i = 0; $i < count(self::TIME_BOUNDARIES) - 1; $i++) {
+            $slots[] = [
+                'start' => self::TIME_BOUNDARIES[$i],
+                'end'   => self::TIME_BOUNDARIES[$i + 1],
+                'label' => self::TIME_BOUNDARIES[$i] . ' - ' . self::TIME_BOUNDARIES[$i + 1],
+            ];
+        }
+
+        return $slots;
+    }
+
+    /**
+     * Vérifie qu'une heure (format "H:i") correspond bien à l'une des bornes
+     * fixes autorisées. Sert de garde-fou côté serveur, en complément des
+     * listes déroulantes affichées côté formulaire (qui empêchent déjà toute
+     * saisie libre comme "07:40").
+     */
+    public static function isValidTimeBoundary(string $time): bool
+    {
+        return in_array($time, self::TIME_BOUNDARIES, true);
+    }
+
+    /**
+     * Récupère toutes les réservations actives ("pending" ou "approved") d'une
+     * journée donnée, avec le nom du demandeur, triées par créneau. Un filtre
+     * optionnel sur la salle peut être appliqué.
+     * Utilisé par le service logistique pour afficher le calendrier des salles.
+     */
+    public static function findActiveByDate(string $date, ?int $roomId = null): array
+    {
+        $db = Database::connect();
+
+        $sql = "SELECT
+                    r.id,
+                    r.id_room,
+                    r.purpose,
+                    r.start_datetime,
+                    r.end_datetime,
+                    r.status,
+                    u.name AS requester_name
+                FROM reservations r
+                INNER JOIN users u ON u.id = r.id_user
+                WHERE DATE(r.start_datetime) = ?
+                  AND r.status IN ('pending', 'approved')";
+
+        $params = [$date];
+
+        if ($roomId !== null && $roomId > 0) {
+            $sql .= " AND r.id_room = ?";
+            $params[] = $roomId;
+        }
+
+        $sql .= " ORDER BY r.start_datetime ASC";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Récupère toutes les réservations d'un utilisateur (avec le nom de la salle),
      * triées de la plus récente à la plus ancienne.
      * Un filtre optionnel sur le statut peut être appliqué.

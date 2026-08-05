@@ -111,6 +111,15 @@ class ReservationController
             exit;
         }
 
+        // Les heures ne peuvent être choisies que parmi les créneaux fixes
+        // proposés (07:00, 08:00, ..., 17:00) : pas de saisie libre type 07:40.
+        if (!Reservation::isValidTimeBoundary($from) || !Reservation::isValidTimeBoundary($to)) {
+            $_SESSION['error'] = "Veuillez choisir des heures parmi les créneaux proposés.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=student/new-reservation');
+            exit;
+        }
+
         $start = $date . ' ' . $from . ':00';
         $end   = $date . ' ' . $to . ':00';
 
@@ -250,6 +259,15 @@ class ReservationController
             exit;
         }
 
+        // Les heures ne peuvent être choisies que parmi les créneaux fixes
+        // proposés (07:00, 08:00, ..., 17:00) : pas de saisie libre type 07:40.
+        if (!Reservation::isValidTimeBoundary($from) || !Reservation::isValidTimeBoundary($to)) {
+            $_SESSION['error'] = "Veuillez choisir des heures parmi les créneaux proposés.";
+            $_SESSION['old']   = $old;
+            header('Location: index.php?route=teacher/new-reservation');
+            exit;
+        }
+
         $start = $date . ' ' . $from . ':00';
         $end   = $date . ' ' . $to . ':00';
 
@@ -348,5 +366,67 @@ class ReservationController
 
         header('Location: index.php?route=logistics/requests');
         exit;
+    }
+
+    /**
+     * Affiche le calendrier des salles pour une journée donnée (aujourd'hui par
+     * défaut), avec un filtre optionnel par salle. Réservé au service logistique.
+     * Le calendrier est construit sur des créneaux fixes d'une heure
+     * (07:00 - 08:00, 08:00 - 09:00, ..., 16:00 - 17:00).
+     * (GET index.php?route=logistics/calendar)
+     */
+    public function roomSchedule()
+    {
+        checkRole('logistics_department');
+
+        $userName = htmlspecialchars($_SESSION['user']['name']);
+
+        // Date affichée : celle demandée en GET si elle est valide, sinon aujourd'hui.
+        $date = trim($_GET['date'] ?? '');
+        if (!$this->isValidDate($date)) {
+            $date = date('Y-m-d');
+        }
+
+        // Filtre optionnel par salle.
+        $roomId = (int) ($_GET['salle'] ?? 0);
+
+        $rooms     = Room::findAllAvailable(); // liste complète, pour le <select> de filtre
+        $timeSlots = Reservation::timeSlots();
+
+        $activeReservations = Reservation::findActiveByDate($date, $roomId > 0 ? $roomId : null);
+
+        // Construit une grille [id_room][heure_debut] = réservation, pour un
+        // affichage simple dans la vue (une cellule par salle et par créneau).
+        // Une réservation qui couvre plusieurs créneaux (ex: 07:00 - 09:00)
+        // occupe bien chacune des cellules concernées (07:00-08:00 et 08:00-09:00).
+        $scheduleGrid = [];
+
+        foreach ($activeReservations as $reservation) {
+            $resStart = date('H:i', strtotime($reservation['start_datetime']));
+            $resEnd   = date('H:i', strtotime($reservation['end_datetime']));
+
+            foreach ($timeSlots as $slot) {
+                if ($slot['start'] >= $resStart && $slot['end'] <= $resEnd) {
+                    $scheduleGrid[(int) $reservation['id_room']][$slot['start']] = $reservation;
+                }
+            }
+        }
+
+        // Lignes du tableau : toutes les salles, ou uniquement celle filtrée.
+        $displayRooms = $roomId > 0
+            ? array_values(array_filter($rooms, fn ($room) => (int) $room['id'] === $roomId))
+            : $rooms;
+
+        require __DIR__ . '/../views/reservations/logistics_department_room_schedule.php';
+    }
+
+    /**
+     * Vérifie qu'une chaîne correspond bien à une date valide au format "Y-m-d".
+     */
+    private function isValidDate(string $date): bool
+    {
+        $parsed = DateTime::createFromFormat('Y-m-d', $date);
+
+        return $parsed !== false && $parsed->format('Y-m-d') === $date;
     }
 }
