@@ -52,4 +52,19 @@ class Room
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Récupère toutes les salles, quel que soit leur statut.
+     * Utilisé pour le filtre "salle" de l'historique du service logistique :
+     * une réservation passée peut concerner une salle aujourd'hui en
+     * maintenance ou désactivée, elle doit donc rester sélectionnable.
+     */
+    public static function findAll(): array
+    {
+        $db = Database::connect();
+
+        $stmt = $db->query("SELECT id, name, capacity, description, status FROM rooms ORDER BY name");
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

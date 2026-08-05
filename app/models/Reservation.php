@@ -315,4 +315,57 @@ class Reservation
 
         return (int) $db->lastInsertId();
     }
+
+    /**
+     * Récupère l'historique des réservations déjà traitées ("approved",
+     * "refused" ou "cancelled") pour une semaine donnée (bornes incluses),
+     * avec le nom du demandeur et le nom de la salle, triées de la plus
+     * récente à la plus ancienne.
+     * Filtres optionnels : une salle précise, et une recherche libre sur
+     * le nom du demandeur ou le motif.
+     * Utilisé par le service logistique pour la page "Historique".
+     */
+    public static function findHistory(
+        string $weekStart,
+        string $weekEnd,
+        ?int $roomId = null,
+        ?string $search = null
+    ): array {
+        $db = Database::connect();
+
+        $sql = "SELECT
+                    r.id,
+                    r.purpose,
+                    r.start_datetime,
+                    r.end_datetime,
+                    r.status,
+                    u.name AS requester_name,
+                    rm.name AS room_name
+                FROM reservations r
+                INNER JOIN users u ON u.id = r.id_user
+                INNER JOIN rooms rm ON rm.id = r.id_room
+                WHERE r.status IN ('approved', 'refused', 'cancelled')
+                  AND DATE(r.start_datetime) BETWEEN ? AND ?";
+
+        $params = [$weekStart, $weekEnd];
+
+        if ($roomId !== null && $roomId > 0) {
+            $sql .= " AND r.id_room = ?";
+            $params[] = $roomId;
+        }
+
+        if ($search !== null && $search !== '') {
+            $sql .= " AND (u.name LIKE ? OR r.purpose LIKE ?)";
+            $like = '%' . $search . '%';
+            $params[] = $like;
+            $params[] = $like;
+        }
+
+        $sql .= " ORDER BY r.start_datetime DESC";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

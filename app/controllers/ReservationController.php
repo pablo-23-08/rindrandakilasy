@@ -423,6 +423,48 @@ class ReservationController
     }
 
     /**
+     * Affiche l'historique des réservations déjà traitées (validées, refusées
+     * ou annulées) pour une semaine donnée, avec filtre optionnel par salle
+     * et recherche libre (demandeur / motif). Réservé au service logistique.
+     * (GET index.php?route=logistics/history)
+     */
+    public function logisticsHistory()
+    {
+        checkRole('logistics_department');
+
+        $userName = htmlspecialchars($_SESSION['user']['name']);
+
+        // Semaine affichée : celle de la date demandée en GET si elle est
+        // valide, sinon la semaine en cours.
+        $weekOf = trim($_GET['semaine'] ?? '');
+        if (!$this->isValidDate($weekOf)) {
+            $weekOf = date('Y-m-d');
+        }
+
+        [$weekStart, $weekEnd] = $this->weekRange($weekOf);
+
+        // Filtre optionnel par salle.
+        $roomId = (int) ($_GET['salle'] ?? 0);
+
+        // Recherche libre optionnelle (nom du demandeur ou motif).
+        $search = trim($_GET['recherche'] ?? '');
+
+        // Récupère toutes les salles (même celles en maintenance/désactivées)
+        // pour le <select> de filtre : une réservation passée peut concerner
+        // une salle qui n'est plus disponible aujourd'hui.
+        $rooms = Room::findAll();
+
+        $reservations = Reservation::findHistory(
+            $weekStart,
+            $weekEnd,
+            $roomId > 0 ? $roomId : null,
+            $search !== '' ? $search : null
+        );
+
+        require __DIR__ . '/../views/reservations/logistics_department_historical.php';
+    }
+
+    /**
      * Vérifie qu'une chaîne correspond bien à une date valide au format "Y-m-d".
      */
     private function isValidDate(string $date): bool
@@ -430,5 +472,22 @@ class ReservationController
         $parsed = DateTime::createFromFormat('Y-m-d', $date);
 
         return $parsed !== false && $parsed->format('Y-m-d') === $date;
+    }
+
+    /**
+     * Calcule les bornes (lundi et dimanche) de la semaine contenant la date
+     * donnée. Retourne un tableau [début, fin] au format "Y-m-d".
+     */
+    private function weekRange(string $date): array
+    {
+        $day = new DateTime($date);
+
+        // DateTime::format('N') renvoie 1 (lundi) à 7 (dimanche).
+        $dayOfWeek = (int) $day->format('N');
+
+        $monday = (clone $day)->modify('-' . ($dayOfWeek - 1) . ' days');
+        $sunday = (clone $monday)->modify('+6 days');
+
+        return [$monday->format('Y-m-d'), $sunday->format('Y-m-d')];
     }
 } // <-- Fin de la classe ReservationController

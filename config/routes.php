@@ -50,6 +50,7 @@ return [
     'logistics/requests/approve' => ['controller' => 'ReservationController', 'action' => 'approveReservation'],
     'logistics/requests/refuse'  => ['controller' => 'ReservationController', 'action' => 'refuseReservation'],
     'logistics/calendar'         => ['controller' => 'ReservationController', 'action' => 'roomSchedule'],
+    'logistics/history'          => ['controller' => 'ReservationController', 'action' => 'logisticsHistory'],
 
 
 
