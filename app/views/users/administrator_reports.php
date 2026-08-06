@@ -47,32 +47,32 @@ $typeLabels = [
       Accueil
     </a>
 
-    <a href="index.php?route=admin/users" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/users" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/group.svg" alt="Utilisateurs" width="24" height="24">
       Utilisateurs
     </a>
 
-    <a href="index.php?route=admin/rooms" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/rooms" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/meeting_room.svg" alt="Salles" width="24" height="24">
       Salles
     </a>
 
-    <a href="index.php?route=admin/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
       Calendrier des salles
     </a>
 
-    <a href="index.php?route=admin/reports" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+    <a href="index.php?route=administrator/reports" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
       <img src="assets/img/google-icons/description.svg" alt="Rapports" width="24" height="24">
       Rapports
     </a>
 
-    <a href="index.php?route=admin/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
       Historique
     </a>
 
-    <a href="index.php?route=admin/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
       Mon profil
     </a>
@@ -113,7 +113,7 @@ $typeLabels = [
       <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
 
-    <form action="index.php?route=admin/reports/export" method="POST" class="max-w-md space-y-8">
+    <form action="index.php?route=administrator/reports/export" method="POST" class="max-w-md space-y-8">
 
       <!-- Type de rapport -->
       <section>
@@ -222,7 +222,7 @@ $typeLabels = [
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <a
-                      href="index.php?route=admin/reports/download&id=<?= (int) $recentReport['id'] ?>"
+                      href="index.php?route=administrator/reports/download&id=<?= (int) $recentReport['id'] ?>"
                       class="text-blue-600 hover:underline"
                     >
                       Télécharger

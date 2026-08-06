@@ -21,7 +21,7 @@ class UserController
         'student'               => 'student/profile',
         'teacher'                => 'teacher/profile',
         'logistics_department'   => 'logistics/profile',
-        'admin'                  => 'admin/profile',
+        'admin'                  => 'administrator/profile',
     ];
 
     /**
@@ -79,7 +79,7 @@ class UserController
      * Affiche la page "Gestion des utilisateurs" de l'administrateur :
      * liste des étudiants et enseignants avec leurs statistiques de
      * réservations, avec filtre par rôle et recherche par nom.
-     * (GET index.php?route=admin/users)
+     * (GET index.php?route=administrator/users)
      */
     public function manageUsers()
     {
@@ -101,7 +101,7 @@ class UserController
     /**
      * Affiche le formulaire d'ajout d'un nouvel utilisateur (étudiant ou
      * enseignant).
-     * (GET index.php?route=admin/users/new)
+     * (GET index.php?route=administrator/users/new)
      */
     public function newUserForm()
     {
@@ -120,7 +120,7 @@ class UserController
     /**
      * Traite la création d'un nouvel utilisateur (étudiant ou enseignant)
      * par l'administrateur.
-     * (POST index.php?route=admin/users/store)
+     * (POST index.php?route=administrator/users/store)
      */
     public function storeUser()
     {
@@ -138,56 +138,56 @@ class UserController
         if ($name === '' || $email === '' || $role === '' || $password === '') {
             $_SESSION['error'] = "Veuillez remplir tous les champs obligatoires.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/users/new');
+            header('Location: index.php?route=administrator/users/new');
             exit;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error'] = "L'adresse email saisie n'est pas valide.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/users/new');
+            header('Location: index.php?route=administrator/users/new');
             exit;
         }
 
         if (!User::isManageableRole($role)) {
             $_SESSION['error'] = "Le rôle sélectionné n'est pas valide.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/users/new');
+            header('Location: index.php?route=administrator/users/new');
             exit;
         }
 
         if (strlen($password) < 8) {
             $_SESSION['error'] = "Le mot de passe doit contenir au moins 8 caractères.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/users/new');
+            header('Location: index.php?route=administrator/users/new');
             exit;
         }
 
         if ($password !== $confirmPassword) {
             $_SESSION['error'] = "Les deux mots de passe ne correspondent pas.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/users/new');
+            header('Location: index.php?route=administrator/users/new');
             exit;
         }
 
         if (User::findByEmail($email)) {
             $_SESSION['error'] = "Cette adresse email est déjà utilisée par un autre compte.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/users/new');
+            header('Location: index.php?route=administrator/users/new');
             exit;
         }
 
         User::create($name, $email, password_hash($password, PASSWORD_DEFAULT), $role);
 
         $_SESSION['success'] = "L'utilisateur a bien été créé.";
-        header('Location: index.php?route=admin/users');
+        header('Location: index.php?route=administrator/users');
         exit;
     }
 
     /**
      * Affiche le formulaire de modification d'un utilisateur existant
      * (étudiant ou enseignant).
-     * (GET index.php?route=admin/users/edit&id=...)
+     * (GET index.php?route=administrator/users/edit&id=...)
      */
     public function editUserForm()
     {
@@ -198,7 +198,7 @@ class UserController
 
         if (!$editUser || !User::isManageableRole($editUser['role'])) {
             $_SESSION['error'] = "Utilisateur introuvable.";
-            header('Location: index.php?route=admin/users');
+            header('Location: index.php?route=administrator/users');
             exit;
         }
 
@@ -215,7 +215,7 @@ class UserController
      * Traite la modification d'un utilisateur existant (étudiant ou
      * enseignant) par l'administrateur : nom, email, rôle et,
      * facultativement, mot de passe.
-     * (POST index.php?route=admin/users/update)
+     * (POST index.php?route=administrator/users/update)
      */
     public function updateUser()
     {
@@ -226,7 +226,7 @@ class UserController
 
         if (!$editUser || !User::isManageableRole($editUser['role'])) {
             $_SESSION['error'] = "Utilisateur introuvable.";
-            header('Location: index.php?route=admin/users');
+            header('Location: index.php?route=administrator/users');
             exit;
         }
 
@@ -237,7 +237,7 @@ class UserController
         $confirmPassword = trim($_POST['confirm_password'] ?? '');
 
         $old          = ['nom' => $name, 'email' => $email, 'role' => $role];
-        $redirectBack = 'index.php?route=admin/users/edit&id=' . $id;
+        $redirectBack = 'index.php?route=administrator/users/edit&id=' . $id;
 
         if ($name === '' || $email === '' || $role === '') {
             $_SESSION['error'] = "Veuillez remplir tous les champs obligatoires.";
@@ -291,7 +291,7 @@ class UserController
         }
 
         $_SESSION['success'] = "L'utilisateur a bien été mis à jour.";
-        header('Location: index.php?route=admin/users');
+        header('Location: index.php?route=administrator/users');
         exit;
     }
 
@@ -300,7 +300,7 @@ class UserController
      * son rôle. Une seule vue (users/profile.php) est utilisée pour tous les
      * rôles : elle adapte elle-même son menu latéral selon le rôle en session.
      * (GET index.php?route=student/profile | teacher/profile
-     *                     | logistics/profile | admin/profile)
+     *                     | logistics/profile | administrator/profile)
      */
     public function profile()
     {
@@ -324,7 +324,7 @@ class UserController
      * Traite la modification du profil (nom, email, mot de passe) de
      * l'utilisateur connecté, quel que soit son rôle.
      * (POST index.php?route=student/profile/update | teacher/profile/update
-     *                      | logistics/profile/update | admin/profile/update)
+     *                      | logistics/profile/update | administrator/profile/update)
      */
     public function updateProfile()
     {

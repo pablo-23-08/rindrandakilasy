@@ -38,12 +38,12 @@ $menusByRole = [
     ],
     'admin' => [
         ['route' => 'administrator/dashboard', 'icon' => 'dashboard.svg',      'label' => 'Accueil'],
-        ['route' => 'admin/users',             'icon' => 'group.svg',          'label' => 'Utilisateurs'],
-        ['route' => 'admin/rooms',             'icon' => 'meeting_room.svg',   'label' => 'Salles'],
-        ['route' => 'admin/calendar',          'icon' => 'calendar_month.svg', 'label' => 'Calendrier des salles'],
-        ['route' => 'admin/reports',           'icon' => 'description.svg',    'label' => 'Rapports'],
-        ['route' => 'admin/history',           'icon' => 'history.svg',        'label' => 'Historique'],
-        ['route' => 'admin/profile',           'icon' => 'person.svg',         'label' => 'Mon profil'],
+        ['route' => 'administrator/users',             'icon' => 'group.svg',          'label' => 'Utilisateurs'],
+        ['route' => 'administrator/rooms',             'icon' => 'meeting_room.svg',   'label' => 'Salles'],
+        ['route' => 'administrator/calendar',          'icon' => 'calendar_month.svg', 'label' => 'Calendrier des salles'],
+        ['route' => 'administrator/reports',           'icon' => 'description.svg',    'label' => 'Rapports'],
+        ['route' => 'administrator/history',           'icon' => 'history.svg',        'label' => 'Historique'],
+        ['route' => 'administrator/profile',           'icon' => 'person.svg',         'label' => 'Mon profil'],
     ],
 ];
 
@@ -52,7 +52,7 @@ $updateRoutes = [
     'student'               => 'student/profile/update',
     'teacher'                => 'teacher/profile/update',
     'logistics_department'   => 'logistics/profile/update',
-    'admin'                  => 'admin/profile/update',
+    'admin'                  => 'administrator/profile/update',
 ];
 
 $menu        = $menusByRole[$role] ?? [];

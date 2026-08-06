@@ -378,7 +378,6 @@ class ReservationController
      */
     public function roomSchedule()
     {
-        checkRole('logistics_department');
 
         $userName = htmlspecialchars($_SESSION['user']['name']);
 
@@ -419,7 +418,7 @@ class ReservationController
             ? array_values(array_filter($rooms, fn ($room) => (int) $room['id'] === $roomId))
             : $rooms;
 
-        require __DIR__ . '/../views/reservations/logistics_department_room_schedule.php';
+        require __DIR__ . '/../views/reservations/room_schedule.php';
     }
 
     /**
@@ -428,10 +427,8 @@ class ReservationController
      * et recherche libre (demandeur / motif). Réservé au service logistique.
      * (GET index.php?route=logistics/history)
      */
-    public function logisticsHistory()
+    public function history()
     {
-        checkRole('logistics_department');
-
         $userName = htmlspecialchars($_SESSION['user']['name']);
 
         // Semaine affichée : celle de la date demandée en GET si elle est
@@ -461,7 +458,7 @@ class ReservationController
             $search !== '' ? $search : null
         );
 
-        require __DIR__ . '/../views/reservations/logistics_department_historical.php';
+        require __DIR__ . '/../views/reservations/historical.php';
     }
 
     /**

@@ -84,7 +84,7 @@ function checkAuth(): void
 
 /**
  * Vérifie que l'utilisateur est connecté ET qu'il possède l'un des rôles autorisés.
- * Exemple : checkRole('student') empêche un enseignant/admin/logistique d'accéder à la page.
+ * Exemple : checkRole('student') empêche un enseignant/administrator/logistique d'accéder à la page.
  *
  * @param string|array $allowedRoles Un rôle ou un tableau de rôles autorisés
  */

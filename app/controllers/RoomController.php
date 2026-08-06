@@ -25,7 +25,7 @@ class RoomController
     /**
      * Affiche la liste des salles avec un filtre optionnel par statut et
      * une recherche libre optionnelle sur le nom de la salle.
-     * (GET index.php?route=admin/rooms)
+     * (GET index.php?route=administrator/rooms)
      */
     public function manageRooms()
     {
@@ -45,7 +45,7 @@ class RoomController
 
     /**
      * Affiche le formulaire d'ajout d'une nouvelle salle.
-     * (GET index.php?route=admin/rooms/new)
+     * (GET index.php?route=administrator/rooms/new)
      */
     public function newRoomForm()
     {
@@ -64,7 +64,7 @@ class RoomController
 
     /**
      * Traite la création d'une nouvelle salle.
-     * (POST index.php?route=admin/rooms/store)
+     * (POST index.php?route=administrator/rooms/store)
      */
     public function storeRoom()
     {
@@ -75,7 +75,7 @@ class RoomController
 
     /**
      * Affiche le formulaire de modification d'une salle existante.
-     * (GET index.php?route=admin/rooms/edit&id=...)
+     * (GET index.php?route=administrator/rooms/edit&id=...)
      */
     public function editRoomForm()
     {
@@ -86,7 +86,7 @@ class RoomController
 
         if (!$editRoom) {
             $_SESSION['error'] = "Salle introuvable.";
-            header('Location: index.php?route=admin/rooms');
+            header('Location: index.php?route=administrator/rooms');
             exit;
         }
 
@@ -102,7 +102,7 @@ class RoomController
 
     /**
      * Traite la modification d'une salle existante.
-     * (POST index.php?route=admin/rooms/update)
+     * (POST index.php?route=administrator/rooms/update)
      */
     public function updateRoom()
     {
@@ -112,7 +112,7 @@ class RoomController
 
         if ($roomId <= 0) {
             $_SESSION['error'] = "Salle introuvable.";
-            header('Location: index.php?route=admin/rooms');
+            header('Location: index.php?route=administrator/rooms');
             exit;
         }
 
@@ -149,8 +149,8 @@ class RoomController
         ];
 
         $formRoute = $roomId === null
-            ? 'admin/rooms/new'
-            : 'admin/rooms/edit&id=' . $roomId;
+            ? 'administrator/rooms/new'
+            : 'administrator/rooms/edit&id=' . $roomId;
 
         if ($name === '' || $buildingId <= 0 || $capacity <= 0) {
             $_SESSION['error'] = "Veuillez renseigner le nom, le bâtiment et une capacité valide pour la salle.";
@@ -176,7 +176,7 @@ class RoomController
             $_SESSION['success'] = "La salle « {$name} » a bien été modifiée.";
         }
 
-        header('Location: index.php?route=admin/rooms');
+        header('Location: index.php?route=administrator/rooms');
         exit;
     }
 }

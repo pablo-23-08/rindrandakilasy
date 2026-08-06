@@ -36,32 +36,32 @@ $search     = $search ?? '';
       Accueil
     </a>
 
-    <a href="index.php?route=admin/users" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+    <a href="index.php?route=administrator/users" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
       <img src="assets/img/google-icons/group.svg" alt="Utilisateurs" width="24" height="24">
       Utilisateurs
     </a>
 
-    <a href="index.php?route=admin/rooms" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/rooms" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/meeting_room.svg" alt="Salles" width="24" height="24">
       Salles
     </a>
 
-    <a href="index.php?route=admin/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
       Calendrier des salles
     </a>
 
-    <a href="index.php?route=admin/reports" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/reports" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/description.svg" alt="Rapports" width="24" height="24">
       Rapports
     </a>
 
-    <a href="index.php?route=admin/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
       Historique
     </a>
 
-    <a href="index.php?route=admin/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
       Mon profil
     </a>
@@ -108,13 +108,13 @@ $search     = $search ?? '';
       <button
         type="button"
         class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer"
-        onclick="window.location.href='index.php?route=admin/users/new'"
+        onclick="window.location.href='index.php?route=administrator/users/new'"
       >
         Ajouter un nouvel utilisateur
       </button>
 
       <form method="GET" action="index.php" class="ml-auto flex items-center gap-4 flex-wrap">
-        <input type="hidden" name="route" value="admin/users">
+        <input type="hidden" name="route" value="administrator/users">
 
         <select name="role" class="border rounded px-4 py-2 bg-white" onchange="this.form.submit()">
           <option value="" <?= $roleFilter === '' ? 'selected' : '' ?>>Tous les utilisateurs</option>
@@ -182,7 +182,7 @@ $search     = $search ?? '';
                   <button
                     type="button"
                     class="bg-blue-600 text-white px-4 py-1 rounded cursor-pointer"
-                    onclick="window.location.href='index.php?route=admin/users/edit&id=<?= (int) $user['id'] ?>'"
+                    onclick="window.location.href='index.php?route=administrator/users/edit&id=<?= (int) $user['id'] ?>'"
                   >
                     Modifier
                   </button>

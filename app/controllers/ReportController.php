@@ -28,7 +28,7 @@ class ReportController
     /**
      * Affiche le formulaire de génération de rapport ainsi que
      * l'historique des derniers exports.
-     * (GET index.php?route=admin/reports)
+     * (GET index.php?route=administrator/reports)
      */
     public function index()
     {
@@ -49,7 +49,7 @@ class ReportController
      * Traite le formulaire d'export : valide les champs, construit les
      * données du rapport demandé, génère le fichier (CSV ou PDF),
      * l'enregistre dans l'historique puis le propose au téléchargement.
-     * (POST index.php?route=admin/reports/export)
+     * (POST index.php?route=administrator/reports/export)
      */
     public function export()
     {
@@ -70,28 +70,28 @@ class ReportController
         if (!Report::isValidType($type)) {
             $_SESSION['error'] = 'Veuillez choisir un type de rapport valide.';
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/reports');
+            header('Location: index.php?route=administrator/reports');
             exit;
         }
 
         if (!Report::isValidFormat($format)) {
             $_SESSION['error'] = "Veuillez choisir un format d'export valide.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/reports');
+            header('Location: index.php?route=administrator/reports');
             exit;
         }
 
         if (($dateDebut !== '' && !$this->isValidDate($dateDebut)) || ($dateFin !== '' && !$this->isValidDate($dateFin))) {
             $_SESSION['error'] = 'Les dates saisies ne sont pas valides.';
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/reports');
+            header('Location: index.php?route=administrator/reports');
             exit;
         }
 
         if ($dateDebut !== '' && $dateFin !== '' && $dateDebut > $dateFin) {
             $_SESSION['error'] = "La date de début doit être antérieure ou égale à la date de fin.";
             $_SESSION['old']   = $old;
-            header('Location: index.php?route=admin/reports');
+            header('Location: index.php?route=administrator/reports');
             exit;
         }
 
@@ -145,7 +145,7 @@ class ReportController
 
     /**
      * Permet de re-télécharger un rapport déjà généré depuis l'historique.
-     * (GET index.php?route=admin/reports/download&id=...)
+     * (GET index.php?route=administrator/reports/download&id=...)
      */
     public function download()
     {
@@ -156,7 +156,7 @@ class ReportController
 
         if (!$report) {
             $_SESSION['error'] = 'Rapport introuvable.';
-            header('Location: index.php?route=admin/reports');
+            header('Location: index.php?route=administrator/reports');
             exit;
         }
 
@@ -164,7 +164,7 @@ class ReportController
 
         if (!is_file($filePath)) {
             $_SESSION['error'] = "Le fichier de ce rapport n'est plus disponible.";
-            header('Location: index.php?route=admin/reports');
+            header('Location: index.php?route=administrator/reports');
             exit;
         }
 

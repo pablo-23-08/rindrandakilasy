@@ -26,7 +26,7 @@ $pageSubtitle = $isEdit
     ? "Mettez à jour les informations de la salle"
     : "Renseignez les informations ci-dessous pour ajouter une nouvelle salle";
 
-$formAction = $isEdit ? 'index.php?route=admin/rooms/update' : 'index.php?route=admin/rooms/store';
+$formAction = $isEdit ? 'index.php?route=administrator/rooms/update' : 'index.php?route=administrator/rooms/store';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -53,32 +53,32 @@ $formAction = $isEdit ? 'index.php?route=admin/rooms/update' : 'index.php?route=
       Accueil
     </a>
 
-    <a href="index.php?route=admin/users" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/users" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/group.svg" alt="Utilisateurs" width="24" height="24">
       Utilisateurs
     </a>
 
-    <a href="index.php?route=admin/rooms" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
+    <a href="index.php?route=administrator/rooms" class="flex items-center gap-3 p-2 bg-blue-100 rounded">
       <img src="assets/img/google-icons/meeting_room.svg" alt="Salles" width="24" height="24">
       Salles
     </a>
 
-    <a href="index.php?route=admin/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/calendar" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/calendar_month.svg" alt="Calendrier des salles" width="24" height="24">
       Calendrier des salles
     </a>
 
-    <a href="index.php?route=admin/reports" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/reports" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/description.svg" alt="Rapports" width="24" height="24">
       Rapports
     </a>
 
-    <a href="index.php?route=admin/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/history" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/history.svg" alt="Historique" width="24" height="24">
       Historique
     </a>
 
-    <a href="index.php?route=admin/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
+    <a href="index.php?route=administrator/profile" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded">
       <img src="assets/img/google-icons/person.svg" alt="Mon profil" width="24" height="24">
       Mon profil
     </a>
@@ -176,7 +176,7 @@ $formAction = $isEdit ? 'index.php?route=admin/rooms/update' : 'index.php?route=
       </div>
 
       <div class="flex justify-end gap-3 pt-2">
-        <button type="button" onclick="window.location.href='index.php?route=admin/rooms'"
+        <button type="button" onclick="window.location.href='index.php?route=administrator/rooms'"
                 class="px-4 py-2 rounded border cursor-pointer hover:bg-gray-100">
           Annuler
         </button>

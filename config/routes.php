@@ -41,8 +41,8 @@ return [
     'logistics/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
     'logistics/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
 
-    'admin/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
-    'admin/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
+    'administrator/profile'        => ['controller' => 'UserController', 'action' => 'profile'],
+    'administrator/profile/update' => ['controller' => 'UserController', 'action' => 'updateProfile'],
 
 
     // ── Réservations (service logistique) ──
@@ -50,26 +50,33 @@ return [
     'logistics/requests/approve' => ['controller' => 'ReservationController', 'action' => 'approveReservation'],
     'logistics/requests/refuse'  => ['controller' => 'ReservationController', 'action' => 'refuseReservation'],
     'logistics/calendar'         => ['controller' => 'ReservationController', 'action' => 'roomSchedule'],
-    'logistics/history'          => ['controller' => 'ReservationController', 'action' => 'logisticsHistory'],
+    'logistics/history'          => ['controller' => 'ReservationController', 'action' => 'history'],
+
+    // ── Calendrier des salles / Historique (administrateur) ──
+    // Réutilisent EXACTEMENT les mêmes actions du contrôleur et les mêmes
+    // vues (app/views/reservations/room_schedule.php et historical.php)
+    // que le service logistique : une seule page pour les deux rôles.
+    'administrator/calendar' => ['controller' => 'ReservationController', 'action' => 'roomSchedule'],
+    'administrator/history'  => ['controller' => 'ReservationController', 'action' => 'history'],
 
         // ── Gestion des utilisateurs (administrateur) ──
-    'admin/users'         => ['controller' => 'UserController', 'action' => 'manageUsers'],
-    'admin/users/new'     => ['controller' => 'UserController', 'action' => 'newUserForm'],
-    'admin/users/store'   => ['controller' => 'UserController', 'action' => 'storeUser'],
-    'admin/users/edit'    => ['controller' => 'UserController', 'action' => 'editUserForm'],
-    'admin/users/update'  => ['controller' => 'UserController', 'action' => 'updateUser'],
+    'administrator/users'         => ['controller' => 'UserController', 'action' => 'manageUsers'],
+    'administrator/users/new'     => ['controller' => 'UserController', 'action' => 'newUserForm'],
+    'administrator/users/store'   => ['controller' => 'UserController', 'action' => 'storeUser'],
+    'administrator/users/edit'    => ['controller' => 'UserController', 'action' => 'editUserForm'],
+    'administrator/users/update'  => ['controller' => 'UserController', 'action' => 'updateUser'],
 
     // ── Gestion des salles (administrateur) ──
-    'admin/rooms'         => ['controller' => 'RoomController', 'action' => 'manageRooms'],
-    'admin/rooms/new'     => ['controller' => 'RoomController', 'action' => 'newRoomForm'],
-    'admin/rooms/store'   => ['controller' => 'RoomController', 'action' => 'storeRoom'],
-    'admin/rooms/edit'    => ['controller' => 'RoomController', 'action' => 'editRoomForm'],
-    'admin/rooms/update'  => ['controller' => 'RoomController', 'action' => 'updateRoom'],
+    'administrator/rooms'         => ['controller' => 'RoomController', 'action' => 'manageRooms'],
+    'administrator/rooms/new'     => ['controller' => 'RoomController', 'action' => 'newRoomForm'],
+    'administrator/rooms/store'   => ['controller' => 'RoomController', 'action' => 'storeRoom'],
+    'administrator/rooms/edit'    => ['controller' => 'RoomController', 'action' => 'editRoomForm'],
+    'administrator/rooms/update'  => ['controller' => 'RoomController', 'action' => 'updateRoom'],
 
 
     // ── Rapports (administrateur) ──
-    'admin/reports'          => ['controller' => 'ReportController', 'action' => 'index'],
-    'admin/reports/export'   => ['controller' => 'ReportController', 'action' => 'export'],
-    'admin/reports/download' => ['controller' => 'ReportController', 'action' => 'download'],
+    'administrator/reports'          => ['controller' => 'ReportController', 'action' => 'index'],
+    'administrator/reports/export'   => ['controller' => 'ReportController', 'action' => 'export'],
+    'administrator/reports/download' => ['controller' => 'ReportController', 'action' => 'download'],
 
 ];
